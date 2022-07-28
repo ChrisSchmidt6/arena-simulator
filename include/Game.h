@@ -93,8 +93,7 @@ struct Game {
             }
             case 2: {
                 std::cout << "Going to vendors..." << std::endl << std::endl;
-                bob.display_greeting();
-                bob.buy_item();
+                bob.buy_menu();
                 break;
             }
             case 3:

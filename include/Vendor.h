@@ -9,8 +9,8 @@
 struct Vendor {
     Vendor(std::string);
     void display_greeting();
-    void buy_item();
-    void sell_item();
+    void buy_menu();
+    void sell_menu();
     void remove_item(int);
 private:
     std::string name;
