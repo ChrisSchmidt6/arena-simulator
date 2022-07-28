@@ -1,9 +1,5 @@
 #include "Enemy.h"
 
-Enemy::Enemy() {
-    // Do something!
-}
-
 void Enemy::display_stats() {
     std::cout << "Attack: " << attack << std::endl;
     std::cout << "Defense: " << defense << std::endl;

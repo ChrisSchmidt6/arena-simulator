@@ -13,7 +13,7 @@
 struct Game {
     inline static int choice = -1;
     inline static Vendor bob = Vendor("Bob");
-    inline static Enemy sauron = Enemy("Sauron", );
+    inline static Enemy sauron = Enemy("Sauron", 5, 5, 10, 5, 10);
 
     inline static void start() {
         std::cout << "Welcome to RPG simulator!" << std::endl << std::endl;
