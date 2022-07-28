@@ -1,13 +1,12 @@
 #pragma once
 
+#include <filesystem>
 #include <iostream>
 #include <fstream>
 
 #include "Player.h"
 
-#define DIR "/Users/chrisschmidt/Code/c++/current/saves/"
-
-std::string directory = DIR;
+std::string directory = "saves/";
 
 void save_to_file() {
     std::fstream save_file;
@@ -47,6 +46,7 @@ bool load_save_file() {
 }
 
 bool create_save_file() {
+    std::filesystem::create_directory("saves");
     std::fstream save_file;
     save_file.open(directory + Player::name + ".txt");
 
