@@ -9,7 +9,7 @@ void Vendor::buy_menu() {
     std::cout << "(0) Leave" << std::endl;
     for(int i = 0; i < inventory.size(); i++) {
         Item* item = inventory[i];
-        std::cout << "(" << (i + 1) << ") Buy " << item->ITEM_NAME << ": " << item->price << " gold pieces" << std::endl;
+        std::cout << "(" << (i + 1) << ") Buy " << item->ITEM_NAME << ": " << item->PRICE << " gold pieces" << std::endl;
     }
     std::cout << "(" << inventory.size() + 1 << ") Quit game" << std::endl;
 

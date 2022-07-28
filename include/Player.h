@@ -20,8 +20,8 @@ public:
     };
 
     inline static bool buy_item(Item* item) {
-        if(gold >= item->price) {
-            gold -= item->price;
+        if(gold >= item->PRICE) {
+            gold -= item->PRICE;
             inventory.push_back(item);
             return true;
         } else {
