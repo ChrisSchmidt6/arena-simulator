@@ -12,8 +12,6 @@
 
 struct Game {
     inline static int choice = -1;
-    inline static Vendor bob = Vendor("Bob");
-    inline static Enemy sauron = Enemy("Sauron", 5, 5, 10, 5, 10);
 
     inline static void start() {
         std::cout << "Welcome to RPG simulator!" << std::endl << std::endl;
@@ -44,13 +42,10 @@ struct Game {
                 break;
             case 1: {
                 std::cout << "Entering combat!" << std::endl;
-                sauron.display_stats();
-                std::cout << std::endl;
                 break;
             }
             case 2: {
                 std::cout << "Going to vendors..." << std::endl << std::endl;
-                bob.buy_menu();
                 break;
             }
             case 3:

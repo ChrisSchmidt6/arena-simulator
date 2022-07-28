@@ -7,12 +7,14 @@
 #include "Item.h"
 
 struct Vendor {
-    Vendor(std::string);
-    void display_greeting();
+    const std::string name;
+    
     void buy_menu();
     void sell_menu();
     void remove_item(int);
+
+    virtual void display_greeting() const;
+    virtual void generate_inventory();
 private:
-    std::string name;
     std::vector<Item*> inventory;
 };

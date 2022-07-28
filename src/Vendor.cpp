@@ -1,17 +1,5 @@
 #include "Vendor.h"
 
-Vendor::Vendor(std::string name) {
-    this->name = name;
-    inventory.push_back(get_item(201));
-    inventory.push_back(get_item(202));
-    inventory.push_back(get_item(203));
-    inventory.push_back(get_item(204));
-}
-
-void Vendor::display_greeting() {
-    std::cout << "Welcome to " << name << "'s shop. I've got many wares!" << std::endl;
-}
-
 void Vendor::buy_menu() {
     display_greeting();
     
@@ -21,7 +9,7 @@ void Vendor::buy_menu() {
     std::cout << "(0) Leave" << std::endl;
     for(int i = 0; i < inventory.size(); i++) {
         Item* item = inventory[i];
-        std::cout << "(" << (i + 1) << ") Buy " << item->ITEM_NAME << ": " << item->get_price() << " gold pieces" << std::endl;
+        std::cout << "(" << (i + 1) << ") Buy " << item->ITEM_NAME << ": " << item->price << " gold pieces" << std::endl;
     }
     std::cout << "(" << inventory.size() + 1 << ") Quit game" << std::endl;
 
@@ -30,7 +18,7 @@ void Vendor::buy_menu() {
     std::cout << std::endl;
 
     if(choice == 0) {
-        std::cout << "Thanks for visiting my shop!\n" << std::endl;
+        return;
     } else if(choice > 0 && choice <= inventory.size()) {
         int item_location = choice - 1;
         Item* chosen_item = inventory[item_location];
