@@ -20,8 +20,8 @@ public:
     };
 
     inline static bool buy_item(Item* item) {
-        if(gold >= item->get_price()) {
-            gold -= item->get_price();
+        if(gold >= item->price) {
+            gold -= item->price;
             inventory.push_back(item);
             return true;
         } else {
@@ -110,7 +110,8 @@ public:
                 len = save_data.find(',', pos);
                 (len == std::string::npos) ? len = save_data.find('\n', pos) - pos : len -= pos;
 
-                insert_item(get_item(stoi(save_data.substr(pos, len))));
+                // Currently not loading inventory, wait for new Item implementation
+                // insert_item(get_item(stoi(save_data.substr(pos, len))));
 
                 pos = save_data.find(',', pos + len) + 2;
                 pos += save_data[pos] == '\n' ? 1 : 0;
