@@ -24,49 +24,6 @@ struct Game {
         return active;
     };
 
-    inline static bool initiate_character() {
-        std::cout << "Please enter a corresponding number for the following menu options." << std::endl;
-        std::cout << "(0) Exit" << std::endl;
-        std::cout << "(1) Load character" << std::endl;
-        std::cout << "(2) Create character" << std::endl;
-        
-        while(true) {
-            std::cout << "Choice: ";
-            try {
-                std::cin >> choice;
-            } catch(std::exception e) {
-                std::cout << "Please enter a number." << std::endl;
-                std::cout << std::endl;
-                continue;
-            }
-
-            try {
-                switch(choice) {
-                    case 0:
-                        return false;
-                    case 1:
-                        std::cout << "Please enter the name of the character you'd like to load: ";
-                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                        std::getline(std::cin, Player::name);
-                        std::cout << std::endl;
-                        return load_save_file();
-                    case 2:
-                        std::cout << "Please enter the name of a new character: ";
-                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                        std::getline(std::cin, Player::name);
-                        std::cout << std::endl;
-                        return create_save_file();
-                    default:
-                        std::cout << "That was not an option." << std::endl;
-                        break;
-                }
-            } catch(std::exception e) {
-                std::cout << "Could not initiate character!" << std::endl;
-                return false;
-            }
-        }
-    };
-
     inline static void main_menu() {
         choice = -1;
         std::cout << "Please enter a corresponding number for the following menu options." << std::endl;
@@ -115,4 +72,47 @@ struct Game {
     };
 private:
     inline static bool active = false;
+
+    inline static bool initiate_character() {
+        std::cout << "Please enter a corresponding number for the following menu options." << std::endl;
+        std::cout << "(0) Exit" << std::endl;
+        std::cout << "(1) Load character" << std::endl;
+        std::cout << "(2) Create character" << std::endl;
+        
+        while(true) {
+            std::cout << "Choice: ";
+            try {
+                std::cin >> choice;
+            } catch(std::exception e) {
+                std::cout << "Please enter a number." << std::endl;
+                std::cout << std::endl;
+                continue;
+            }
+
+            try {
+                switch(choice) {
+                    case 0:
+                        return false;
+                    case 1:
+                        std::cout << "Please enter the name of the character you'd like to load: ";
+                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                        std::getline(std::cin, Player::name);
+                        std::cout << std::endl;
+                        return load_save_file();
+                    case 2:
+                        std::cout << "Please enter the name of a new character: ";
+                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                        std::getline(std::cin, Player::name);
+                        std::cout << std::endl;
+                        return create_save_file();
+                    default:
+                        std::cout << "That was not an option." << std::endl;
+                        break;
+                }
+            } catch(std::exception e) {
+                std::cout << "Could not initiate character!" << std::endl;
+                return false;
+            }
+        }
+    };
 };
