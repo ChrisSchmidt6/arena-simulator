@@ -15,8 +15,14 @@ public:
         inventory.push_back(item);
     };
 
-    inline static void remove_item(int location) {
-        inventory.erase(inventory.begin() + location);
+    inline static bool remove_item(Item* item) {
+        for(int i = 0; i < inventory.size(); i++) {
+            if(inventory[i] == item) {
+                inventory.erase(inventory.begin() + i);
+                return true;
+            }
+        }
+        return false;
     };
 
     inline static bool buy_item(Item* item) {
@@ -27,6 +33,19 @@ public:
         } else {
             return false;
         }
+    };
+
+    inline static bool equip_weapon(Item* weapon) {
+        int inventory_location;
+        for(int i = 0; i < inventory.size(); i++) {
+            if(inventory[i] == weapon) {
+                inventory_location = i;
+                break;
+            }
+        }
+        Item* old_weapon = weapon_slot;
+        weapon_slot = weapon;
+        if(old_weapon != nullptr) inventory[inventory_location] = old_weapon;
     };
 
     inline static void display_stats() {
@@ -53,6 +72,7 @@ public:
         ss << "Level: " << level << std::endl;
         ss << "Experience: " << experience << std::endl;
         ss << "Gold: " << gold << std::endl;
+        ss << "Weapon: " << weapon_slot << std::endl;
         ss << "Inventory: \n\t";
 
         for(int i = 0; i < inventory.size(); i++) {
@@ -92,6 +112,9 @@ public:
                     case 5:
                         gold = parsed_stat;
                         break;
+                    case 6:
+                        // Load weapon_slot once item implementation is added
+                        break;
                     default:
                         std::cout << "Error occurred while loading player stats\n";
                         break;
@@ -124,11 +147,12 @@ public:
         return true;
     };
 private:
-    inline static unsigned int health = 10; // Stat 0
-    inline static unsigned int attack = 1; // Stat 1
-    inline static unsigned int defense = 1; // Stat 2
-    inline static unsigned int level = 1; // Stat 3
-    inline static unsigned int experience = 0; // Stat 4
-    inline static unsigned int gold = 10; // Stat 5
-    inline static std::vector<Item*> inventory;
+    inline static unsigned int health = 10; // Save line 1
+    inline static unsigned int attack = 1; // Save line 2
+    inline static unsigned int defense = 1; // Save line 3
+    inline static unsigned int level = 1; // Save line 4
+    inline static unsigned int experience = 0; // Save line 5
+    inline static unsigned int gold = 10; // Save line 6
+    inline static Item* weapon_slot; // Save line 7
+    inline static std::vector<Item*> inventory; // Save line 8+
 };
