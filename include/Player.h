@@ -6,6 +6,7 @@
 #include <string>
 
 #include "Item.h"
+#include "Assets.h"
 
 class Player {
 public:
@@ -35,7 +36,7 @@ public:
         }
     };
 
-    inline static bool equip_weapon(Item* weapon) {
+    inline static void equip_weapon(Item* weapon) {
         int inventory_location;
         for(int i = 0; i < inventory.size(); i++) {
             if(inventory[i] == weapon) {
@@ -45,10 +46,12 @@ public:
         }
         Item* old_weapon = weapon_slot;
         weapon_slot = weapon;
-        if(old_weapon != nullptr) inventory[inventory_location] = old_weapon;
+        if(old_weapon->ID != 200) inventory[inventory_location] = old_weapon;
+        else inventory.erase(inventory.begin() + inventory_location);
     };
 
     inline static void display_stats() {
+        std::cout << "Max Health: " << max_health << std::endl;
         std::cout << "Health: " << health << std::endl;
         std::cout << "Attack: " << attack << std::endl;
         std::cout << "Defense: " << defense << std::endl;
@@ -57,22 +60,44 @@ public:
         std::cout << "Gold: " << gold << std::endl;
     };
 
-    inline static void display_inventory() {
-        for(int i = 0; i < inventory.size(); i++) {
-            std::cout << inventory[i]->ITEM_NAME << std::endl;
+    inline static void inventory_menu() {
+        int choice = -1;
+        while(choice != 0) {
+            std::cout << "Please enter a corresponding number for the following menu options.\n";
+            std::cout << "(0) Go back\n";
+            for(int i = 0; i < inventory.size(); i++) {
+                std::cout << "(" << i + 1 << ") View options - ";
+                std::cout << inventory[i]->ITEM_NAME << "\n";
+            }
+            std::cout << "(" << inventory.size() + 1 << ") Quit game\n";
+
+            std::cout << "Choice: ";
+            std::cin >> choice;
+            std::cout << "\n";
+
+            if(choice == 0) {
+                return;
+            } else if(choice >= 1 && choice <= inventory.size()) {
+                inventory[choice - 1]->display_item_options();
+            } else if(choice == inventory.size() + 1) {
+                exit(-1);
+            } else {
+                std::cout << "That was not an option.\n";
+            }
         }
     };
 
     inline static std::string get_save_data() {
         std::stringstream ss;
 
+        ss << "Max Health: " << max_health << std::endl;
         ss << "Health: " << health << std::endl;
         ss << "Attack: " << attack << std::endl;
         ss << "Defense: " << defense << std::endl;
         ss << "Level: " << level << std::endl;
         ss << "Experience: " << experience << std::endl;
         ss << "Gold: " << gold << std::endl;
-        ss << "Weapon: " << weapon_slot << std::endl;
+        ss << "Weapon: " << weapon_slot->ID << std::endl;
         ss << "Inventory: \n\t";
 
         for(int i = 0; i < inventory.size(); i++) {
@@ -95,25 +120,28 @@ public:
 
                 switch(current_stat) {
                     case 0:
-                        health = parsed_stat;
+                        max_health = parsed_stat;
                         break;
                     case 1:
-                        attack = parsed_stat;
+                        health = parsed_stat;
                         break;
                     case 2:
-                        defense = parsed_stat;
+                        attack = parsed_stat;
                         break;
                     case 3:
-                        level = parsed_stat;
+                        defense = parsed_stat;
                         break;
                     case 4:
-                        experience = parsed_stat;
+                        level = parsed_stat;
                         break;
                     case 5:
-                        gold = parsed_stat;
+                        experience = parsed_stat;
                         break;
                     case 6:
-                        // Load weapon_slot once item implementation is added
+                        gold = parsed_stat;
+                        break;
+                    case 7:
+                        weapon_slot = get_item(parsed_stat);
                         break;
                     default:
                         std::cout << "Error occurred while loading player stats\n";
@@ -130,11 +158,12 @@ public:
             
             len = 0;
             while(len != std::string::npos && pos >= ogPos) {
+
                 len = save_data.find(',', pos);
                 (len == std::string::npos) ? len = save_data.find('\n', pos) - pos : len -= pos;
+                if(len == 0) break;
 
-                // Currently not loading inventory, wait for new Item implementation
-                // insert_item(get_item(stoi(save_data.substr(pos, len))));
+                insert_item(get_item(stoi(save_data.substr(pos, len))));
 
                 pos = save_data.find(',', pos + len) + 2;
                 pos += save_data[pos] == '\n' ? 1 : 0;
@@ -147,12 +176,13 @@ public:
         return true;
     };
 private:
-    inline static unsigned int health = 10; // Save line 1
-    inline static unsigned int attack = 1; // Save line 2
-    inline static unsigned int defense = 1; // Save line 3
-    inline static unsigned int level = 1; // Save line 4
-    inline static unsigned int experience = 0; // Save line 5
-    inline static unsigned int gold = 10; // Save line 6
-    inline static Item* weapon_slot; // Save line 7
-    inline static std::vector<Item*> inventory; // Save line 8+
+    inline static unsigned int max_health = 10; // save line 1
+    inline static unsigned int health = 10; // Save line 2
+    inline static unsigned int attack = 1; // Save line 3
+    inline static unsigned int defense = 1; // Save line 4
+    inline static unsigned int level = 1; // Save line 5
+    inline static unsigned int experience = 0; // Save line 6
+    inline static unsigned int gold = 10; // Save line 7
+    inline static Item* weapon_slot = get_item(200); // Save line 8
+    inline static std::vector<Item*> inventory; // Save line 9+
 };

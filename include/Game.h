@@ -5,8 +5,8 @@
 #include <string>
 #include <limits>
 
-#include "Player.h"
 #include "File.h"
+#include "Player.h"
 #include "Enemy.h"
 #include "Vendor.h"
 
@@ -53,7 +53,7 @@ struct Game {
                 std::cout << std::endl;
                 break;
             case 4:
-                Player::display_inventory();
+                Player::inventory_menu();
                 std::cout << std::endl;
                 break;
             case 5:

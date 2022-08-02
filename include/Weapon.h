@@ -3,7 +3,6 @@
 #include <iostream>
 
 #include "Item.h"
-#include "Player.h"
 
 struct Weapon : Item {
     const unsigned int ATTACK_MOD;
