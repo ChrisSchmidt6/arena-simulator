@@ -95,7 +95,7 @@ private:
                         std::cout << "\n";
                         return load_save_file();
                     case 2:
-                        std::cout << "Please enter the name of a new character: ";
+                        std::cout << "Please enter the name of your new character: ";
                         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                         std::getline(std::cin, Player::name);
                         std::cout << "\n";
