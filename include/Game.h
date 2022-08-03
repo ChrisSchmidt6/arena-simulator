@@ -60,7 +60,6 @@ struct Game {
                 break;
             case 4:
                 Player::inventory_menu();
-                std::cout << "\n";
                 break;
             case 5:
                 save_to_file();
@@ -69,6 +68,7 @@ struct Game {
             default:
                 std::cout << "Please enter a valid option.\n";
                 main_menu();
+                break;
         }
     };
 private:
