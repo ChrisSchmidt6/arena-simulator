@@ -1,21 +1,29 @@
+#include <limits>
+
 #include "Vendor.h"
 
 void Vendor::buy_menu() {
     display_greeting();
     
     int choice;
-    std::cout << "Please enter a corresponding number for the following menu options.\n";
+    do {
+        std::cout << "Please enter a corresponding number for the following menu options.\n";
 
-    std::cout << "(0) Leave\n";
-    for(int i = 0; i < inventory.size(); i++) {
-        Item* item = inventory[i];
-        std::cout << "(" << (i + 1) << ") Buy " << item->ITEM_NAME << ": " << item->PRICE << " gold pieces\n";
-    }
-    std::cout << "(" << inventory.size() + 1 << ") Quit game\n";
+        std::cout << "(0) Leave\n";
+        for(int i = 0; i < inventory.size(); i++) {
+            Item* item = inventory[i];
+            std::cout << "(" << (i + 1) << ") Buy " << item->ITEM_NAME << ": " << item->PRICE << " gold pieces\n";
+        }
+        std::cout << "(" << inventory.size() + 1 << ") Quit game\n";
 
-    std::cout << "Choice: ";
-    std::cin >> choice;
-    std::cout << "\n";
+        std::cout << "Choice: ";
+        std::cout << "\n";
+        if(!std::cin >> choice) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Please enter a valid integer\n";
+        }
+    } while(std::cin.fail());
 
     if(choice == 0) {
         return;
@@ -31,7 +39,8 @@ void Vendor::buy_menu() {
     } else if(choice == inventory.size() + 1) {
         exit(-1);
     } else {
-        std::cout << "That was not an option.\n\n";
+        std::cout << "Please enter a valid option.\n";
+        buy_menu();
     }
 }
 
