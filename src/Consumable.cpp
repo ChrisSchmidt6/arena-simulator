@@ -7,6 +7,7 @@
 void Consumable::display_item_options() {
     int choice;
     while(true) {
+        std::cout << "[Consumable Options Menu]\n";
         std::cout << "What would you like to do with your " << ITEM_NAME << "?\n";
         std::cout << "Please enter a corresponding number for the following menu options.\n";
         std::cout << "(0) Go back\n";
@@ -21,7 +22,7 @@ void Consumable::display_item_options() {
         
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Please enter a valid integer.\n";
+        std::cout << "Please enter a valid integer.\n\n";
     }
 
     switch (choice) {
@@ -29,6 +30,7 @@ void Consumable::display_item_options() {
             return;
         case 1:
             while(true) {
+                std::cout << "[Confirmation Menu]\n";
                 std::cout << "Are you SURE you want to DISPOSE OF " << ITEM_NAME << "?\n";
                 std::cout << "(0) No\n";
                 std::cout << "(1) What was I thinking?!\n";
@@ -42,7 +44,7 @@ void Consumable::display_item_options() {
                 
                 std::cin.clear();
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::cout << "Please enter a valid integer.\n";
+                std::cout << "Please enter a valid integer.\n\n";
             }
             
             if(choice != 2) return;
@@ -55,7 +57,7 @@ void Consumable::display_item_options() {
         case 2:
             exit(-1);
         default:
-            std::cout << "Please enter a valid option.\n";
+            std::cout << "Please enter a valid option.\n\n";
             display_item_options();
     }
 }

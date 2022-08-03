@@ -61,41 +61,43 @@ public:
 
     inline static void inventory_menu() {
         int choice;
-        while(true) {
-            std::cout << "You have " << gold << " gold pieces.\n";
-            std::cout << "Please enter a corresponding number for the following menu options.\n";
-            std::cout << "(0) Go back\n";
-            for(int i = 0; i < inventory.size(); i++) {
-                std::cout << "(" << i + 1 << ") View options - ";
-                std::cout << inventory[i]->ITEM_NAME << "\n";
+        while(choice != 0) {
+            while(true) {
+                std::cout << "[Inventory Menu]\n";
+                std::cout << "You have " << gold << " gold pieces.\n";
+                std::cout << "Please enter a corresponding number for the following menu options.\n";
+                std::cout << "(0) Go back\n";
+                for(int i = 0; i < inventory.size(); i++) {
+                    std::cout << "(" << i + 1 << ") View options - ";
+                    std::cout << inventory[i]->ITEM_NAME << "\n";
+                }
+                std::cout << "(" << inventory.size() + 1 << ") View equipped " << weapon_slot->ITEM_NAME << "\n";
+                std::cout << "(" << inventory.size() + 2 << ") Quit game\n";
+
+                std::cout << "Choice: ";
+                std::cin >> choice;
+                std::cout << "\n";
+
+                if(!std::cin.fail()) break;
+                
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout << "Please enter a valid integer.\n\n";
             }
-            std::cout << "(" << inventory.size() + 1 << ") View equipped " << weapon_slot->ITEM_NAME << "\n";
-            std::cout << "(" << inventory.size() + 2 << ") Quit game\n";
 
-            std::cout << "Choice: ";
-            std::cin >> choice;
-            std::cout << "\n";
-
-            if(!std::cin.fail()) break;
-            
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Please enter a valid integer.\n";
-        }
-
-        if(choice == 0) {
-            return;
-        } else if(choice >= 1 && choice <= inventory.size()) {
-            inventory[choice - 1]->display_item_options();
-            inventory_menu();
-        } else if(choice == inventory.size() + 1) {
-            weapon_menu();
-            inventory_menu();
-        } else if(choice == inventory.size() + 2) {
-            exit(-1);
-        } else {
-            std::cout << "Please enter a valid option.\n";
-            inventory_menu();
+            if(choice >= 1 && choice <= inventory.size()) {
+                inventory[choice - 1]->display_item_options();
+            } else if(choice == inventory.size() + 1) {
+                if(weapon_slot->ID == 200) {
+                    std::cout << "There's no reason to stand around examining your fists.\n\n";
+                } else {
+                    weapon_menu();
+                }
+            } else if(choice == inventory.size() + 2) {
+                exit(-1);
+            } else {
+                std::cout << "Please enter a valid option.\n\n";
+            }
         }
     };
 
@@ -104,6 +106,7 @@ public:
         Weapon* weapon = static_cast<Weapon*>(weapon_slot);
         int choice;
         while(true) {
+            std::cout << "[Equipped Weapon Menu]\n";
             std::cout << "Your " << weapon->ITEM_NAME << " has an attack modifier of " << weapon->ATTACK_MOD << "\n";
             std::cout << "Please enter a corresponding number for the following menu options.\n";
             std::cout << "(0) Go back\n";
@@ -118,7 +121,7 @@ public:
             
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Please enter a valid integer.\n";
+            std::cout << "Please enter a valid integer.\n\n";
         }
 
         switch(choice) {
@@ -126,18 +129,19 @@ public:
                 return;
             case 1:
                 if(weapon->ID == 200) {
-                    std::cout << "You try to remove your fists... but you fail. Congratulations, your fists are now sore.\n";
+                    std::cout << "You try to remove your fists... but you fail. Congratulations, your fists are now sore.\n\n";
                     return;
                 } else {
                     inventory.push_back(weapon_slot);
                     weapon_slot = get_item(200);
+                    std::cout << "You are no longer wielding your " << weapon->ITEM_NAME << ".\n\n";
                     return;
                 }
                 break;
             case 2:
                 exit(-1);
             default:
-                std::cout << "Please enter a valid option.\n";
+                std::cout << "Please enter a valid option.\n\n";
                 inventory_menu();
                 break;
         }

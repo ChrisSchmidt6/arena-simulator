@@ -23,6 +23,7 @@ struct Game {
     inline static void main_menu() {
         int choice;
         while(true) {
+            std::cout << "[Main Menu]\n";
             std::cout << "Please enter a corresponding number for the following menu options.\n";
             std::cout << "(0) Exit\n";
             std::cout << "(1) Enter combat\n";
@@ -39,7 +40,7 @@ struct Game {
             
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Please enter a valid integer.\n";
+            std::cout << "Please enter a valid integer.\n\n";
         }
 
         switch(choice) {
@@ -66,7 +67,7 @@ struct Game {
                 std::cout << "Saved your character.\n";
                 break;
             default:
-                std::cout << "Please enter a valid option.\n";
+                std::cout << "Please enter a valid option.\n\n";
                 main_menu();
                 break;
         }
@@ -77,6 +78,7 @@ private:
     inline static bool initiate_character() {
         int choice;
         while(true) {
+            std::cout << "[Start Menu]\n";
             std::cout << "Please enter a corresponding number for the following menu options.\n";
             std::cout << "(0) Exit\n";
             std::cout << "(1) Load character\n";
@@ -90,7 +92,7 @@ private:
             
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Please enter a valid integer.\n";
+            std::cout << "Please enter a valid integer.\n\n";
         }
 
         switch(choice) {
@@ -109,7 +111,7 @@ private:
                 std::cout << "\n";
                 return create_save_file();
             default:
-                std::cout << "Please enter a valid option.\n";
+                std::cout << "Please enter a valid option.\n\n";
                 return initiate_character();
         }
     };

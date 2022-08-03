@@ -34,9 +34,7 @@ bool load_save_file() {
         
         bool loadSuccess = Player::load_save_data(save_file_data);
         if(loadSuccess) {
-            std::cout << "You have loaded the following character:\n";
-            std::cout << "Name: " << Player::name << "\n";
-            std::cout << Player::get_save_data() << "\n";
+            std::cout << "You have successfully loaded character: " << Player::name << "\n\n";
             return true;
         } else {
             std::cout << "Could not load the character. Corrupted save data.\n";
@@ -57,9 +55,7 @@ bool create_save_file() {
     } else {
         save_to_file();
 
-        std::cout << "You have created the following character:\n";
-        std::cout << "Name: " << Player::name << "\n";
-        std::cout << Player::get_save_data() << "\n";
+        std::cout << "You have created a new character: " << Player::name << "\n\n";
         return true;
     }
 }
