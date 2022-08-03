@@ -33,13 +33,22 @@ void Weapon::display_item_options() {
             std::cout << "You are now wielding your " << ITEM_NAME << "!\n";
             break;
         case 2:
-            std::cout << "Are you SURE you want to DISPOSE OF " << ITEM_NAME << "?\n";
-            std::cout << "(0) No\n";
-            std::cout << "(1) What was I thinking?!\n";
-            std::cout << "(2) Yes\n";
-            std::cout << "Choice: ";
-            std::cin >> choice;
-            std::cout << "\n";
+            while(true) {
+                std::cout << "Are you SURE you want to DISPOSE OF " << ITEM_NAME << "?\n";
+                std::cout << "(0) No\n";
+                std::cout << "(1) What was I thinking?!\n";
+                std::cout << "(2) Yes\n";
+
+                std::cout << "Choice: ";
+                std::cin >> choice;
+                std::cout << "\n";
+
+                if(!std::cin.fail()) break;
+                
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout << "Please enter a valid integer\n";
+            }
             
             if(choice != 2) return;
             if(Player::remove_item(this)) {
