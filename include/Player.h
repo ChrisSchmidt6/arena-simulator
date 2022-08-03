@@ -61,8 +61,8 @@ public:
     };
 
     inline static void inventory_menu() {
-        int choice = -1;
-        while(choice != 0) {
+        int choice;
+        while(true) {
             std::cout << "Please enter a corresponding number for the following menu options.\n";
             std::cout << "(0) Go back\n";
             for(int i = 0; i < inventory.size(); i++) {
@@ -75,15 +75,22 @@ public:
             std::cin >> choice;
             std::cout << "\n";
 
-            if(choice == 0) {
-                return;
-            } else if(choice >= 1 && choice <= inventory.size()) {
-                inventory[choice - 1]->display_item_options();
-            } else if(choice == inventory.size() + 1) {
-                exit(-1);
-            } else {
-                std::cout << "That was not an option.\n";
-            }
+            if(!std::cin.fail()) break;
+            
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Please enter a valid integer\n";
+        }
+
+        if(choice == 0) {
+            return;
+        } else if(choice >= 1 && choice <= inventory.size()) {
+            inventory[choice - 1]->display_item_options();
+        } else if(choice == inventory.size() + 1) {
+            exit(-1);
+        } else {
+            std::cout << "Please enter a valid option.\n";
+            inventory_menu();
         }
     };
 

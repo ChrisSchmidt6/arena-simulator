@@ -1,17 +1,29 @@
+#include <iostream>
+#include <limits>
+
 #include "Weapon.h"
 #include "Player.h"
 
 void Weapon::display_item_options() {
-    std::cout << "What would you like to do with your " << ITEM_NAME << "?\n";
-    std::cout << "Please enter a corresponding number for the following menu options.\n";
-    std::cout << "(0) Go back\n";
-    std::cout << "(1) Equip " << ITEM_NAME << "\n";
-    std::cout << "(2) DISPOSE OF " << ITEM_NAME << "\n";
-
-    std::cout << "Choice: ";
     int choice;
-    std::cin >> choice;
-    std::cout << "\n";
+    while(true) {
+        std::cout << "What would you like to do with your " << ITEM_NAME << "?\n";
+        std::cout << "Please enter a corresponding number for the following menu options.\n";
+        std::cout << "(0) Go back\n";
+        std::cout << "(1) Equip " << ITEM_NAME << "\n";
+        std::cout << "(2) DISPOSE OF " << ITEM_NAME << "\n";
+        std::cout << "(3) Quit game\n";
+
+        std::cout << "Choice: ";
+        std::cin >> choice;
+        std::cout << "\n";
+
+        if(!std::cin.fail()) break;
+        
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Please enter a valid integer\n";
+    }
 
     switch (choice) {
         case 0:
@@ -36,7 +48,10 @@ void Weapon::display_item_options() {
                 std::cout << "Could not locate " << ITEM_NAME << "\n";
             }
             break;
+        case 3:
+            exit(-1);
         default:
-            break;
+            std::cout << "Please enter a valid option.\n";
+            display_item_options();
     }
 }

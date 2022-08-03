@@ -4,9 +4,9 @@
 
 void Vendor::buy_menu() {
     display_greeting();
-    
+
     int choice;
-    do {
+    while(true) {
         std::cout << "Please enter a corresponding number for the following menu options.\n";
 
         std::cout << "(0) Leave\n";
@@ -17,13 +17,15 @@ void Vendor::buy_menu() {
         std::cout << "(" << inventory.size() + 1 << ") Quit game\n";
 
         std::cout << "Choice: ";
+        std::cin >> choice;
         std::cout << "\n";
-        if(!std::cin >> choice) {
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Please enter a valid integer\n";
-        }
-    } while(std::cin.fail());
+
+        if(!std::cin.fail()) break;
+        
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Please enter a valid integer\n";
+    }
 
     if(choice == 0) {
         return;
