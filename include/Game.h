@@ -39,7 +39,7 @@ struct Game {
             
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Please enter a valid integer\n";
+            std::cout << "Please enter a valid integer.\n";
         }
 
         switch(choice) {
@@ -90,7 +90,7 @@ private:
             
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Please enter a valid integer\n";
+            std::cout << "Please enter a valid integer.\n";
         }
 
         switch(choice) {
@@ -110,7 +110,7 @@ private:
                 return create_save_file();
             default:
                 std::cout << "Please enter a valid option.\n";
-                initiate_character();
+                return initiate_character();
         }
     };
 };

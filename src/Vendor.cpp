@@ -1,10 +1,10 @@
+#include <iostream>
 #include <limits>
 
 #include "Vendor.h"
+#include "Player.h"
 
 void Vendor::buy_menu() {
-    display_greeting();
-
     int choice;
     while(true) {
         std::cout << "Please enter a corresponding number for the following menu options.\n";
@@ -24,7 +24,7 @@ void Vendor::buy_menu() {
         
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Please enter a valid integer\n";
+        std::cout << "Please enter a valid integer.\n";
     }
 
     if(choice == 0) {
