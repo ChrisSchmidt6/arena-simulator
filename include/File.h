@@ -21,7 +21,7 @@ bool load_save_file() {
     save_file.open(directory + Player::name + ".txt");
 
     if(!save_file.is_open()) {
-        std::cout << "That character does not exist." << std::endl << std::endl;
+        std::cout << "That character does not exist.\n\n";
         return false;
     } else {
         std::string save_file_data;
@@ -34,12 +34,12 @@ bool load_save_file() {
         
         bool loadSuccess = Player::load_save_data(save_file_data);
         if(loadSuccess) {
-            std::cout << "You have loaded the following character:" << std::endl;
-            std::cout << "Name: " << Player::name << std::endl;
-            std::cout << Player::get_save_data() << std::endl;
+            std::cout << "You have loaded the following character:\n";
+            std::cout << "Name: " << Player::name << "\n";
+            std::cout << Player::get_save_data() << "\n";
             return true;
         } else {
-            std::cout << "Could not load the character. Corrupted save data." << std::endl;
+            std::cout << "Could not load the character. Corrupted save data.\n";
             return false;
         }
     }
@@ -52,14 +52,14 @@ bool create_save_file() {
 
     if(save_file.is_open()) {
         save_file.close();
-        std::cout << "That character already exists." << std::endl << std::endl;
+        std::cout << "That character already exists.\n\n";
         return false;
     } else {
         save_to_file();
 
-        std::cout << "You have created the following character:" << std::endl;
-        std::cout << "Name: " << Player::name << std::endl;
-        std::cout << Player::get_save_data() << std::endl;
+        std::cout << "You have created the following character:\n";
+        std::cout << "Name: " << Player::name << "\n";
+        std::cout << Player::get_save_data() << "\n";
         return true;
     }
 }

@@ -4,18 +4,18 @@ void Vendor::buy_menu() {
     display_greeting();
     
     int choice;
-    std::cout << "Please enter a corresponding number for the following menu options." << std::endl;
+    std::cout << "Please enter a corresponding number for the following menu options.\n";
 
-    std::cout << "(0) Leave" << std::endl;
+    std::cout << "(0) Leave\n";
     for(int i = 0; i < inventory.size(); i++) {
         Item* item = inventory[i];
-        std::cout << "(" << (i + 1) << ") Buy " << item->ITEM_NAME << ": " << item->PRICE << " gold pieces" << std::endl;
+        std::cout << "(" << (i + 1) << ") Buy " << item->ITEM_NAME << ": " << item->PRICE << " gold pieces\n";
     }
-    std::cout << "(" << inventory.size() + 1 << ") Quit game" << std::endl;
+    std::cout << "(" << inventory.size() + 1 << ") Quit game\n";
 
     std::cout << "Choice: ";
     std::cin >> choice;
-    std::cout << std::endl;
+    std::cout << "\n";
 
     if(choice == 0) {
         return;
@@ -26,17 +26,17 @@ void Vendor::buy_menu() {
         if(Player::buy_item(chosen_item)) {
             remove_item(item_location);
         } else {
-            std::cout << "You do not have enough gold pieces for that item.\n" << std::endl;
+            std::cout << "You do not have enough gold pieces for that item.\n\n";
         }
     } else if(choice == inventory.size() + 1) {
         exit(-1);
     } else {
-        std::cout << "That was not an option.\n" << std::endl;
+        std::cout << "That was not an option.\n\n";
     }
 }
 
 void Vendor::sell_menu() {
-    std::cout << "Let's see what you've got!\n" << std::endl;
+    std::cout << "Let's see what you've got!\n\n";
 }
 
 void Vendor::remove_item(int location) {

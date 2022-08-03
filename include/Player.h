@@ -51,13 +51,13 @@ public:
     };
 
     inline static void display_stats() {
-        std::cout << "Max Health: " << max_health << std::endl;
-        std::cout << "Health: " << health << std::endl;
-        std::cout << "Attack: " << attack << std::endl;
-        std::cout << "Defense: " << defense << std::endl;
-        std::cout << "Level: " << level << std::endl;
-        std::cout << "Experience: " << experience << std::endl;
-        std::cout << "Gold: " << gold << std::endl;
+        std::cout << "Max Health: " << max_health << "\n";
+        std::cout << "Health: " << health << "\n";
+        std::cout << "Attack: " << attack << "\n";
+        std::cout << "Defense: " << defense << "\n";
+        std::cout << "Level: " << level << "\n";
+        std::cout << "Experience: " << experience << "\n";
+        std::cout << "Gold: " << gold << "\n";
     };
 
     inline static void inventory_menu() {
@@ -90,14 +90,14 @@ public:
     inline static std::string get_save_data() {
         std::stringstream ss;
 
-        ss << "Max Health: " << max_health << std::endl;
-        ss << "Health: " << health << std::endl;
-        ss << "Attack: " << attack << std::endl;
-        ss << "Defense: " << defense << std::endl;
-        ss << "Level: " << level << std::endl;
-        ss << "Experience: " << experience << std::endl;
-        ss << "Gold: " << gold << std::endl;
-        ss << "Weapon: " << weapon_slot->ID << std::endl;
+        ss << "Max Health: " << max_health << "\n";
+        ss << "Health: " << health << "\n";
+        ss << "Attack: " << attack << "\n";
+        ss << "Defense: " << defense << "\n";
+        ss << "Level: " << level << "\n";
+        ss << "Experience: " << experience << "\n";
+        ss << "Gold: " << gold << "\n";
+        ss << "Weapon: " << weapon_slot->ID << "\n";
         ss << "Inventory: \n\t";
 
         for(int i = 0; i < inventory.size(); i++) {

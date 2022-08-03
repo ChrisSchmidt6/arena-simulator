@@ -1,11 +1,11 @@
 #include "Enemy.h"
 
 void Enemy::display_stats() {
-    std::cout << "Attack: " << attack << std::endl;
-    std::cout << "Defense: " << defense << std::endl;
-    std::cout << "Health: " << health << std::endl;
-    std::cout << "Level: " << level << std::endl;
-    std::cout << "Gold: " << gold << std::endl;
+    std::cout << "Attack: " << attack << "\n";
+    std::cout << "Defense: " << defense << "\n";
+    std::cout << "Health: " << health << "\n";
+    std::cout << "Level: " << level << "\n";
+    std::cout << "Gold: " << gold << "\n";
 }
 
 unsigned int Enemy::get_defense() {
