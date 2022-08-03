@@ -158,7 +158,6 @@ public:
             
             len = 0;
             while(len != std::string::npos && pos >= ogPos) {
-
                 len = save_data.find(',', pos);
                 (len == std::string::npos) ? len = save_data.find('\n', pos) - pos : len -= pos;
                 if(len == 0) break;
@@ -166,7 +165,7 @@ public:
                 insert_item(get_item(stoi(save_data.substr(pos, len))));
 
                 pos = save_data.find(',', pos + len) + 2;
-                pos += save_data[pos] == '\n' ? 1 : 0;
+                pos += (save_data[pos] == '\n') ? 1 : 0;
             }
         } catch(const std::exception & ex) {
             std::cout << ex.what() << "\n";
