@@ -11,7 +11,7 @@
 
 struct Game {
     inline static void start() {
-        std::cout << "Welcome to RPG simulator!\n\n";
+        std::cout << "Welcome to Arena Simulator!\n\n";
         active = initiate_character();
     };
 
@@ -75,43 +75,48 @@ private:
     inline static bool active = false;
 
     inline static bool initiate_character() {
-        int choice;
-        while(true) {
-            std::cout << "[Start Menu]\n";
-            std::cout << "Please enter a corresponding number for the following menu options.\n";
-            std::cout << "(0) Exit\n";
-            std::cout << "(1) Load character\n";
-            std::cout << "(2) Create character\n";
+        int choice = -1;
+        while(choice != 0) {
+            while(true) {
+                std::cout << "[Start Menu]\n";
+                std::cout << "Please enter a corresponding number for the following menu options.\n";
+                std::cout << "(0) Exit\n";
+                std::cout << "(1) Load character\n";
+                std::cout << "(2) Create character\n";
 
-            std::cout << "Choice: ";
-            std::cin >> choice;
-            std::cout << "\n";
-
-            if(!std::cin.fail()) break;
-            
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Please enter a valid integer.\n\n";
-        }
-
-        switch(choice) {
-            case 0:
-                return false;
-            case 1:
-                std::cout << "Please enter the name of the character you'd like to load: ";
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::getline(std::cin, Player::name);
+                std::cout << "Choice: ";
+                std::cin >> choice;
                 std::cout << "\n";
-                return load_save_file();
-            case 2:
-                std::cout << "Please enter the name of your new character: ";
+
+                if(!std::cin.fail()) break;
+                
+                std::cin.clear();
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::getline(std::cin, Player::name);
-                std::cout << "\n";
-                return create_save_file();
-            default:
-                std::cout << "Please enter a valid option.\n\n";
-                return initiate_character();
+                std::cout << "Please enter a valid integer.\n\n";
+            }
+
+            switch(choice) {
+                case 0:
+                    return false;
+                case 1:
+                    std::cout << "Please enter the name of the character you'd like to load: ";
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    std::getline(std::cin, Player::name);
+                    std::cout << "\n";
+                    if(load_save_file()) return true;
+                    break;
+                case 2:
+                    std::cout << "Please enter the name of your new character: ";
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    std::getline(std::cin, Player::name);
+                    std::cout << "\n";
+                    if(create_save_file()) return true;
+                    break;
+                default:
+                    std::cout << "Please enter a valid option.\n\n";
+                    break;
+            }
         }
+        return false;
     };
 };
