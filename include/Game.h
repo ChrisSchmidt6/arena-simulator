@@ -10,6 +10,10 @@
 #include "Vendor.h"
 
 struct Game {
+    inline static Vendor apothecary = Vendor("Sandra", 1, VenType::Apothecary);
+    inline static Vendor blacksmith = Vendor("Bob", 1, VenType::Blacksmith);
+    inline static Vendor chef = Vendor("Emeril", 1, VenType::Chef);
+    
     inline static void start() {
         std::cout << "Welcome to Arena Simulator!\n\n";
         active = initiate_character();
@@ -52,6 +56,7 @@ struct Game {
             }
             case 2: {
                 std::cout << "Going to vendors...\n\n";
+                vendor_menu();
                 break;
             }
             case 3:
@@ -69,6 +74,50 @@ struct Game {
                 std::cout << "Please enter a valid option.\n\n";
                 main_menu();
                 break;
+        }
+    };
+
+    inline static void vendor_menu() {
+        int choice = -1;
+        while(choice != 0) {
+            while(true) {
+                std::cout << "[Vendor Select Menu]\n";
+                std::cout << "Please enter a corresponding number for the following menu options.\n";
+                std::cout << "(0) Go back\n";
+                std::cout << "(1) Apothecary\n";
+                std::cout << "(2) Blacksmith\n";
+                std::cout << "(3) Chef\n";
+                std::cout << "(4) Quit game\n";
+
+                std::cout << "Choice: ";
+                std::cin >> choice;
+                std::cout << "\n";
+
+                if(!std::cin.fail()) break;
+
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout << "Please enter a valid integer.\n\n";
+            }
+
+            switch(choice) {
+                case 0:
+                    return;
+                case 1:
+                    apothecary.buy_menu();
+                    break;
+                case 2:
+                    blacksmith.buy_menu();
+                    break;
+                case 3:
+                    chef.buy_menu();
+                    break;
+                case 4:
+                    exit(-1);
+                    break;
+                default:
+                    break;
+            }
         }
     };
 private:
