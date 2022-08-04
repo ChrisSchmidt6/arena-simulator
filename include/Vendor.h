@@ -5,13 +5,17 @@
 #include "Item.h"
 
 struct Vendor {
-    const std::string name;
+    const std::string NAME;
+    const unsigned int TIER;
+    const VenType TYPE;
+
+    Vendor(std::string name, unsigned int tier, VenType type);
     
     void buy_menu();
     void sell_menu();
     void remove_item(int item_location);
 
-    virtual void generate_inventory();
-private:
+    void generate_inventory();
+protected:
     std::vector<Item*> inventory;
 };

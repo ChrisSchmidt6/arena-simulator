@@ -60,7 +60,7 @@ public:
     };
 
     inline static void inventory_menu() {
-        int choice;
+        int choice = -1;
         while(choice != 0) {
             while(true) {
                 std::cout << "[Inventory Menu]\n";

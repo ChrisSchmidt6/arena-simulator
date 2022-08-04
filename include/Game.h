@@ -7,7 +7,6 @@
 
 #include "File.h"
 #include "Player.h"
-#include "Enemy.h"
 #include "Vendor.h"
 
 struct Game {
