@@ -72,7 +72,6 @@ struct Game {
                 break;
             default:
                 std::cout << "Please enter a valid option.\n\n";
-                main_menu();
                 break;
         }
     };
