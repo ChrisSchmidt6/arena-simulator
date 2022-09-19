@@ -95,7 +95,7 @@ public:
                 }
             } else if(choice == inventory.size() + 2) {
                 exit(-1);
-            } else {
+            } else if(choice != 0) {
                 std::cout << "Please enter a valid option.\n\n";
             }
         }
