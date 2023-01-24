@@ -39,7 +39,7 @@ void Vendor::buy_menu() {
             int item_location = choice - 1;
             Item* chosen_item = inventory[item_location];
 
-            if(Player::buy_item(chosen_item)) {
+            if(Player::get().buy_item(chosen_item)) {
                 remove_item(item_location);
             } else {
                 std::cout << "You do not have enough gold pieces for that item.\n\n";

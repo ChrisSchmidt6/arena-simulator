@@ -53,11 +53,11 @@ void Game::main_menu() {
             break;
         }
         case 3:
-            Player::display_stats();
+            Player::get().display_stats();
             std::cout << "\n";
             break;
         case 4:
-            Player::inventory_menu();
+            Player::get().inventory_menu();
             break;
         case 5:
             save_to_file();
@@ -140,14 +140,14 @@ bool Game::initiate_character() {
             case 1:
                 std::cout << "Please enter the name of the character you'd like to load: ";
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::getline(std::cin, Player::name);
+                std::getline(std::cin, Player::get().name);
                 std::cout << "\n";
                 if(load_save_file()) return true;
                 break;
             case 2:
                 std::cout << "Please enter the name of your new character: ";
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::getline(std::cin, Player::name);
+                std::getline(std::cin, Player::get().name);
                 std::cout << "\n";
                 if(create_save_file()) return true;
                 break;

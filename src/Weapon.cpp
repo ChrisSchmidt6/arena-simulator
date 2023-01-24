@@ -30,7 +30,7 @@ void Weapon::display_item_options() {
         case 0:
             return;
         case 1:
-            Player::equip_weapon(this);
+            Player::get().equip_weapon(this);
             std::cout << "You are now wielding your " << ITEM_NAME << "!\n\n";
             break;
         case 2:
@@ -53,7 +53,7 @@ void Weapon::display_item_options() {
             }
             
             if(choice != 2) return;
-            if(Player::remove_item(this)) {
+            if(Player::get().remove_item(this)) {
                 std::cout << "You disposed of your " << ITEM_NAME << "\n\n";
             } else {
                 std::cout << "Could not locate " << ITEM_NAME << "\n\n";

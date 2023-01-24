@@ -48,7 +48,7 @@ void Consumable::display_item_options() {
             }
             
             if(choice != 2) return;
-            if(Player::remove_item(this)) {
+            if(Player::get().remove_item(this)) {
                 std::cout << "You disposed of your " << ITEM_NAME << "\n";
             } else {
                 std::cout << "Could not locate " << ITEM_NAME << "\n";
