@@ -1,11 +1,12 @@
 #include "Game.h"
 
 int main() {
-	Game::start();
+	Game& game = Game::get();
+
+	game.start();
 	
-	while(Game::is_running()) {
-		// Logic
-		Game::main_menu();
+	while(game.is_running()) {
+		game.main_menu();
 	}
 
 	return 0;
