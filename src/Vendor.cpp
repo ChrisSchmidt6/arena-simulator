@@ -11,6 +11,50 @@ Vendor::Vendor(std::string name, unsigned int tier, VenType type):
         generate_inventory();
 }
 
+void Vendor::main_menu(Vendor& apothecary, Vendor& blacksmith, Vendor& chef) {
+    int choice = -1;
+    while(choice != 0) {
+        while(true) {
+            std::cout << "[Vendor Select Menu]\n";
+            std::cout << "Please enter a corresponding number for the following menu options.\n";
+            std::cout << "(0) Go back\n";
+            std::cout << "(1) Apothecary\n";
+            std::cout << "(2) Blacksmith\n";
+            std::cout << "(3) Chef\n";
+            std::cout << "(4) Quit game\n";
+
+            std::cout << "Choice: ";
+            std::cin >> choice;
+            std::cout << "\n";
+
+            if(!std::cin.fail()) break;
+
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Please enter a valid integer.\n\n";
+        }
+
+        switch(choice) {
+            case 0:
+                return;
+            case 1:
+                apothecary.buy_menu();
+                break;
+            case 2:
+                blacksmith.buy_menu();
+                break;
+            case 3:
+                chef.buy_menu();
+                break;
+            case 4:
+                exit(-1);
+                break;
+            default:
+                break;
+        }
+    }
+}
+
 void Vendor::buy_menu() {
     int choice = -1;
     while(choice != 0) {

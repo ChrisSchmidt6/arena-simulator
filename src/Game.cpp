@@ -49,7 +49,7 @@ void Game::main_menu() {
         }
         case 2: {
             std::cout << "Going to vendors...\n\n";
-            vendor_menu();
+            Vendor::main_menu(apothecary, blacksmith, chef);
             break;
         }
         case 3:
@@ -66,50 +66,6 @@ void Game::main_menu() {
         default:
             std::cout << "Please enter a valid option.\n\n";
             break;
-    }
-};
-
-void Game::vendor_menu() {
-    int choice = -1;
-    while(choice != 0) {
-        while(true) {
-            std::cout << "[Vendor Select Menu]\n";
-            std::cout << "Please enter a corresponding number for the following menu options.\n";
-            std::cout << "(0) Go back\n";
-            std::cout << "(1) Apothecary\n";
-            std::cout << "(2) Blacksmith\n";
-            std::cout << "(3) Chef\n";
-            std::cout << "(4) Quit game\n";
-
-            std::cout << "Choice: ";
-            std::cin >> choice;
-            std::cout << "\n";
-
-            if(!std::cin.fail()) break;
-
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Please enter a valid integer.\n\n";
-        }
-
-        switch(choice) {
-            case 0:
-                return;
-            case 1:
-                apothecary.buy_menu();
-                break;
-            case 2:
-                blacksmith.buy_menu();
-                break;
-            case 3:
-                chef.buy_menu();
-                break;
-            case 4:
-                exit(-1);
-                break;
-            default:
-                break;
-        }
     }
 };
 
