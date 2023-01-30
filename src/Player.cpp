@@ -4,6 +4,7 @@
 #include <string>
 
 #include "Player.h"
+#include "Weapon.h"
 
 void Player::insert_item(Item* item) {
     inventory.push_back(item);

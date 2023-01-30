@@ -4,7 +4,7 @@
 
 #include "Vendor.h"
 #include "Player.h"
-#include "Assets.h"
+#include "assets.h"
 
 Vendor::Vendor(std::string name, unsigned int tier, VenType type):
     NAME(name), TIER(tier), TYPE(type) {
