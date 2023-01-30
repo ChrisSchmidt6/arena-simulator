@@ -4,8 +4,8 @@
 #include <limits>
 
 #include "Game.h"
-#include "File.h"
 #include "Player.h"
+#include "utility.h"
 
 void Game::start() {
     std::cout << "Welcome to Arena Simulator!\n\n";
@@ -30,7 +30,7 @@ void Game::main_menu() {
 
         std::cout << "Choice: ";
         std::cin >> choice;
-        std::cout << "\n";
+        print_separator();
 
         if(!std::cin.fail()) break;
         
@@ -48,7 +48,6 @@ void Game::main_menu() {
             break;
         }
         case 2: {
-            std::cout << "Going to vendors...\n\n";
             Vendor::main_menu(apothecary, blacksmith, chef);
             break;
         }
@@ -61,7 +60,7 @@ void Game::main_menu() {
             break;
         case 5:
             save_to_file();
-            std::cout << "Saved your character.\n";
+            std::cout << "Saved your character.\n\n";
             break;
         default:
             std::cout << "Please enter a valid option.\n\n";
@@ -81,7 +80,7 @@ bool Game::initiate_character() {
 
             std::cout << "Choice: ";
             std::cin >> choice;
-            std::cout << "\n";
+            print_separator();
 
             if(!std::cin.fail()) break;
             

@@ -3,12 +3,13 @@
 
 #include "Weapon.h"
 #include "Player.h"
+#include "utility.h"
 
 void Weapon::display_item_options() {
     int choice;
     while(true) {
+        std::cout << "What would you like to do with your " << ITEM_NAME << "?\n\n";
         std::cout << "[Weapon Options Menu]\n";
-        std::cout << "What would you like to do with your " << ITEM_NAME << "?\n";
         std::cout << "Please enter a corresponding number for the following menu options.\n";
         std::cout << "(0) Go back\n";
         std::cout << "(1) Equip " << ITEM_NAME << "\n";
@@ -17,7 +18,7 @@ void Weapon::display_item_options() {
 
         std::cout << "Choice: ";
         std::cin >> choice;
-        std::cout << "\n";
+        print_separator();
 
         if(!std::cin.fail()) break;
         
@@ -43,7 +44,7 @@ void Weapon::display_item_options() {
 
                 std::cout << "Choice: ";
                 std::cin >> choice;
-                std::cout << "\n";
+                print_separator();
 
                 if(!std::cin.fail()) break;
                 

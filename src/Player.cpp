@@ -5,6 +5,7 @@
 
 #include "Player.h"
 #include "Weapon.h"
+#include "utility.h"
 
 void Player::insert_item(Item* item) {
     inventory.push_back(item);
@@ -70,7 +71,7 @@ void Player::inventory_menu() {
 
             std::cout << "Choice: ";
             std::cin >> choice;
-            std::cout << "\n";
+            print_separator();
 
             if(!std::cin.fail()) break;
             
@@ -109,7 +110,7 @@ void Player::weapon_menu() {
 
         std::cout << "Choice: ";
         std::cin >> choice;
-        std::cout << "\n";
+        print_separator();
 
         if(!std::cin.fail()) break;
         

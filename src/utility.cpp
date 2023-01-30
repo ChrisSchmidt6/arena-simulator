@@ -1,10 +1,13 @@
-#pragma once
-
 #include <filesystem>
 #include <iostream>
 #include <fstream>
 
 #include "Player.h"
+#include "utility.h"
+
+void print_separator() {
+    std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+}
 
 std::string directory = "saves/";
 

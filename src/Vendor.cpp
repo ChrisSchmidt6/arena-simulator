@@ -5,6 +5,7 @@
 #include "Vendor.h"
 #include "Player.h"
 #include "assets.h"
+#include "utility.h"
 
 Vendor::Vendor(std::string name, unsigned int tier, VenType type):
     NAME(name), TIER(tier), TYPE(type) {
@@ -25,7 +26,7 @@ void Vendor::main_menu(Vendor& apothecary, Vendor& blacksmith, Vendor& chef) {
 
             std::cout << "Choice: ";
             std::cin >> choice;
-            std::cout << "\n";
+            print_separator();
 
             if(!std::cin.fail()) break;
 
@@ -70,7 +71,7 @@ void Vendor::buy_menu() {
 
             std::cout << "Choice: ";
             std::cin >> choice;
-            std::cout << "\n";
+            print_separator();
 
             if(!std::cin.fail()) break;
             
