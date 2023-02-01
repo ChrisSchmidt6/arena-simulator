@@ -31,11 +31,17 @@ inline std::vector<Item*> item_container {
     new Weapon(203, "Wooden Sword", VenType::Blacksmith, 12, 1, Rarity::Common, true, 6),
     new Weapon(204, "Wooden Mace", VenType::Blacksmith, 12, 1, Rarity::Common, true, 6),
     new Weapon(205, "Spiked Club", VenType::Blacksmith, 15, 1, Rarity::Uncommon, true, 7),
-    new Weapon(206, "Stone Dagger", VenType::Blacksmith, 13, 2, Rarity::Common, true, 7),
-    new Weapon(207, "Stone Spear", VenType::Blacksmith, 20, 2, Rarity::Common, true, 9),
-    new Weapon(208, "Stone Sword", VenType::Blacksmith, 20, 2, Rarity::Common, true, 9),
-    new Weapon(209, "Stone Hammer", VenType::Blacksmith, 20, 2, Rarity::Common, true, 9),
-    new Weapon(209, "Spiked Flail", VenType::Blacksmith, 25, 2, Rarity::Uncommon, true, 10)
+    new Weapon(206, "Flint Dagger", VenType::Blacksmith, 13, 2, Rarity::Common, true, 7),
+    new Weapon(207, "Flint Spear", VenType::Blacksmith, 20, 2, Rarity::Common, true, 8),
+    new Weapon(208, "Stone Hammer", VenType::Blacksmith, 20, 2, Rarity::Uncommon, true, 8),
+    new Weapon(209, "Bronze Sword", VenType::Blacksmith, 25, 2, Rarity::Uncommon, true, 10),
+    new Weapon(210, "Spiked Flail", VenType::Blacksmith, 25, 2, Rarity::Uncommon, true, 10),
+    new Weapon(211, "Iron Chain", VenType::Blacksmith, 23, 3, Rarity::Uncommon, true, 10),
+    new Weapon(212, "Iron Dagger", VenType::Blacksmith, 23, 3, Rarity::Uncommon, true, 10),
+    new Weapon(213, "Iron Spear", VenType::Blacksmith, 25, 3, Rarity::Uncommon, true, 12),
+    new Weapon(214, "Iron Sword", VenType::Blacksmith, 25, 3, Rarity::Uncommon, true, 12),
+    new Weapon(215, "Bonecrusher", VenType::Blacksmith, 30, 3, Rarity::Uncommon, true, 13),
+    new Weapon(216, "Iron Rapier", VenType::Blacksmith, 35, 3, Rarity::Rare, true, 14),
 };
 
 Item* get_item(const unsigned int ID);
