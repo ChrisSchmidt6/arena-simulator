@@ -13,7 +13,7 @@ Vendor::Vendor(std::string name, unsigned int tier, VenType type):
 }
 
 void Vendor::main_menu(Vendor& apothecary, Vendor& blacksmith, Vendor& chef) {
-    std::vector<std::pair<std::string, std::function<void()>>> menu_items;
+    pairVec menu_items;
 
     do {
         std::cout << "[Vendor Select Menu]\n";
@@ -33,7 +33,7 @@ void Vendor::main_menu(Vendor& apothecary, Vendor& blacksmith, Vendor& chef) {
 }
 
 void Vendor::buy_menu() {
-    std::vector<std::pair<std::string, std::function<void()>>> menu_items;
+    pairVec menu_items;
 
     do {
         std::cout << "[Vendor Purchase Menu]\n";

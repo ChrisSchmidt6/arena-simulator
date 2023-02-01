@@ -10,7 +10,7 @@ void print_separator() {
     std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 }
 
-bool print_menu(std::vector<std::pair<std::string, std::function<void()>>> menu_items) {
+bool print_menu(pairVec menu_items) {
     int choice = -1;
     while(true) {
         std::cout << "Please enter a corresponding number for the following menu options.\n";

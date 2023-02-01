@@ -5,8 +5,10 @@
 #include <vector>
 #include <utility>
 
+typedef std::vector<std::pair<std::string, std::function<void()>>> pairVec;
+
 void print_separator();
-bool print_menu(std::vector<std::pair<std::string, std::function<void()>>> menu_items);
+bool print_menu(pairVec menu_items);
 
 void save_to_file();
 bool load_save_file();

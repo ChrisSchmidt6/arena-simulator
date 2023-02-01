@@ -6,7 +6,7 @@
 #include "utility.h"
 
 void Weapon::display_item_options() {
-    std::vector<std::pair<std::string, std::function<void()>>> menu_items;
+    pairVec menu_items;
 
     do {
         if(Player::get().has_item(this) == -1) return;

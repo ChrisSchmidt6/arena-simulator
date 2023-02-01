@@ -22,7 +22,7 @@ void Game::main_menu() {
         std::cout << "[Main Menu]\n";
         std::cout << "Please enter a corresponding number for the following menu options.\n";
         std::cout << "(0) Exit\n";
-        std::cout << "(1) Enter combat\n";
+        std::cout << "(1) Enter arena\n";
         std::cout << "(2) Go to vendors\n";
         std::cout << "(3) Display statistics\n";
         std::cout << "(4) Display inventory\n";

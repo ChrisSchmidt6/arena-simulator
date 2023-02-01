@@ -61,7 +61,7 @@ void Player::display_stats() {
 };
 
 void Player::inventory_menu() {
-    std::vector<std::pair<std::string, std::function<void()>>> menu_items;
+    pairVec menu_items;
 
     do {
         std::cout << "You have " << gold << " gold pieces.\n\n";
@@ -91,7 +91,7 @@ void Player::inventory_menu() {
 };
 
 void Player::weapon_menu() {
-    std::vector<std::pair<std::string, std::function<void()>>> menu_items;
+    pairVec menu_items;
 
     do {
         // This cannot fail as you're only able to equip weapons
