@@ -1,12 +1,47 @@
 #include <filesystem>
 #include <iostream>
 #include <fstream>
+#include <limits>
 
 #include "Player.h"
 #include "utility.h"
 
 void print_separator() {
     std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+}
+
+bool print_menu(std::vector<std::pair<std::string, std::function<void()>>> menu_items) {
+    int choice = -1;
+    while(true) {
+        std::cout << "Please enter a corresponding number for the following menu options.\n";
+        std::cout << "(0) Go back\n";
+        for(int i = 0; i < menu_items.size(); i++) {
+            std::cout << "(" << (i + 1) << ") " << menu_items[i].first << "\n";
+        }
+        std::cout << "(" << menu_items.size() + 1 << ") Quit game\n";
+
+        std::cout << "Choice: ";
+        std::cin >> choice;
+        print_separator();
+
+        if(!std::cin.fail()) break;
+
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Please enter a valid integer.\n\n";
+    }
+
+    if(choice > 0 && choice <= menu_items.size()) {
+        // Call function associated with menu choice
+        menu_items[choice - 1].second();
+    } else if(choice == menu_items.size() + 1) {
+        exit(-1);
+    } else if(choice == 0) {
+        return false;
+    } else {
+        std::cout << "Please enter a valid option.\n\n";
+    }
+    return true;
 }
 
 std::string directory = "saves/";

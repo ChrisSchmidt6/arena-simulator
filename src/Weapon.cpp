@@ -6,38 +6,26 @@
 #include "utility.h"
 
 void Weapon::display_item_options() {
-    int choice;
-    while(true) {
+    std::vector<std::pair<std::string, std::function<void()>>> menu_items;
+
+    do {
+        if(Player::get().has_item(this) == -1) return;
+        
         std::cout << "What would you like to do with your " << ITEM_NAME << "?\n\n";
         std::cout << "[Weapon Options Menu]\n";
-        std::cout << "Please enter a corresponding number for the following menu options.\n";
-        std::cout << "(0) Go back\n";
-        std::cout << "(1) Equip " << ITEM_NAME << "\n";
-        std::cout << "(2) DISPOSE OF " << ITEM_NAME << "\n";
-        std::cout << "(3) Quit game\n";
 
-        std::cout << "Choice: ";
-        std::cin >> choice;
-        print_separator();
+        menu_items.clear();
 
-        if(!std::cin.fail()) break;
-        
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Please enter a valid integer.\n\n";
-    }
-
-    switch (choice) {
-        case 0:
-            return;
-        case 1:
+        menu_items.push_back(std::make_pair("Equip " + ITEM_NAME, [this]() -> void {
             Player::get().equip_weapon(this);
             std::cout << "You are now wielding your " << ITEM_NAME << "!\n\n";
-            break;
-        case 2:
+        }));
+
+        menu_items.push_back(std::make_pair("DISPOSE OF " + ITEM_NAME, [this]() -> void {
+            int choice = -1;
             while(true) {
+                std::cout << "Are you SURE you want to DISPOSE OF " << ITEM_NAME << "?\n\n";
                 std::cout << "[Confirmation Menu]\n";
-                std::cout << "Are you SURE you want to DISPOSE OF " << ITEM_NAME << "?\n";
                 std::cout << "(0) No\n";
                 std::cout << "(1) What was I thinking?!\n";
                 std::cout << "(2) Yes\n";
@@ -55,15 +43,10 @@ void Weapon::display_item_options() {
             
             if(choice != 2) return;
             if(Player::get().remove_item(this)) {
-                std::cout << "You disposed of your " << ITEM_NAME << "\n\n";
+                std::cout << "You disposed of your " << ITEM_NAME << "\n";
             } else {
-                std::cout << "Could not locate " << ITEM_NAME << "\n\n";
+                std::cout << "Could not locate " << ITEM_NAME << "\n";
             }
-            break;
-        case 3:
-            exit(-1);
-        default:
-            std::cout << "Please enter a valid option.\n\n";
-            display_item_options();
-    }
+        }));
+    } while(print_menu(menu_items));
 }

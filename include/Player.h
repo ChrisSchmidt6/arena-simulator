@@ -14,6 +14,7 @@ struct Player {
 
     void insert_item(Item* item);
     bool remove_item(Item* item);
+    int has_item(Item* item);
     bool buy_item(Item* item);
     void equip_weapon(Item* weapon);
     void display_stats();

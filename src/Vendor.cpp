@@ -13,88 +13,46 @@ Vendor::Vendor(std::string name, unsigned int tier, VenType type):
 }
 
 void Vendor::main_menu(Vendor& apothecary, Vendor& blacksmith, Vendor& chef) {
-    int choice = -1;
-    while(choice != 0) {
-        while(true) {
-            std::cout << "[Vendor Select Menu]\n";
-            std::cout << "Please enter a corresponding number for the following menu options.\n";
-            std::cout << "(0) Go back\n";
-            std::cout << "(1) Apothecary\n";
-            std::cout << "(2) Blacksmith\n";
-            std::cout << "(3) Chef\n";
-            std::cout << "(4) Quit game\n";
+    std::vector<std::pair<std::string, std::function<void()>>> menu_items;
 
-            std::cout << "Choice: ";
-            std::cin >> choice;
-            print_separator();
+    do {
+        std::cout << "[Vendor Select Menu]\n";
 
-            if(!std::cin.fail()) break;
+        menu_items.clear();
 
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Please enter a valid integer.\n\n";
-        }
-
-        switch(choice) {
-            case 0:
-                return;
-            case 1:
-                apothecary.buy_menu();
-                break;
-            case 2:
-                blacksmith.buy_menu();
-                break;
-            case 3:
-                chef.buy_menu();
-                break;
-            case 4:
-                exit(-1);
-                break;
-            default:
-                break;
-        }
-    }
+        menu_items.push_back(std::make_pair("Apothecary", [&apothecary]() -> void {
+            apothecary.buy_menu();
+        }));
+        menu_items.push_back(std::make_pair("Blacksmith", [&blacksmith]() -> void {
+            blacksmith.buy_menu();
+        }));
+        menu_items.push_back(std::make_pair("Chef", [&chef]() -> void {
+            chef.buy_menu();
+        }));
+    } while(print_menu(menu_items));
 }
 
 void Vendor::buy_menu() {
-    int choice = -1;
-    while(choice != 0) {
-        while(true) {
-            std::cout << "[Vendor Purchase Menu]\n";
-            std::cout << "Please enter a corresponding number for the following menu options.\n";
-            std::cout << "(0) Leave\n";
-            for(int i = 0; i < inventory.size(); i++) {
-                Item* item = inventory[i];
-                std::cout << "(" << (i + 1) << ") Buy " << item->ITEM_NAME << ": " << item->PRICE << " gold pieces\n";
-            }
-            std::cout << "(" << inventory.size() + 1 << ") Quit game\n";
+    std::vector<std::pair<std::string, std::function<void()>>> menu_items;
 
-            std::cout << "Choice: ";
-            std::cin >> choice;
-            print_separator();
+    do {
+        std::cout << "[Vendor Purchase Menu]\n";
 
-            if(!std::cin.fail()) break;
-            
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Please enter a valid integer.\n\n";
+        menu_items.clear();
+
+        for(int i = 0; i < inventory.size(); i++) {
+            Item* item = inventory[i];
+            menu_items.push_back(std::make_pair(
+                "Buy " + item->ITEM_NAME + ": " + std::to_string(item->PRICE) + " gold pieces",
+                [item, this, i]() -> void {
+                    if(Player::get().buy_item(item)) {
+                        remove_item(i);
+                    } else {
+                        std::cout << "You do not have enough gold pieces for that item.\n\n";
+                    }
+                }));
         }
-
-        if(choice > 0 && choice <= inventory.size()) {
-            int item_location = choice - 1;
-            Item* chosen_item = inventory[item_location];
-
-            if(Player::get().buy_item(chosen_item)) {
-                remove_item(item_location);
-            } else {
-                std::cout << "You do not have enough gold pieces for that item.\n\n";
-            }
-        } else if(choice == inventory.size() + 1) {
-            exit(-1);
-        } else if(choice != 0) {
-            std::cout << "Please enter a valid option.\n\n";
-        }
-    }
+    } while(print_menu(menu_items));
 }
 
 void Vendor::sell_menu() {

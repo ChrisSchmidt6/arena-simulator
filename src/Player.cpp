@@ -12,13 +12,10 @@ void Player::insert_item(Item* item) {
 };
 
 bool Player::remove_item(Item* item) {
-    for(int i = 0; i < inventory.size(); i++) {
-        if(inventory[i] == item) {
-            inventory.erase(inventory.begin() + i);
-            return true;
-        }
-    }
-    return false;
+    int item_location = has_item(item);
+    if(item_location == -1) return false;
+    inventory.erase(inventory.begin() + item_location);
+    return true;
 };
 
 bool Player::buy_item(Item* item) {
@@ -30,6 +27,15 @@ bool Player::buy_item(Item* item) {
         return false;
     }
 };
+
+int Player::has_item(Item* item) {
+    for(int i = 0; i < inventory.size(); i++) {
+        if(inventory[i] == item) {
+            return i;
+        }
+    }
+    return -1;
+}
 
 void Player::equip_weapon(Item* weapon) {
     int inventory_location;
@@ -55,91 +61,61 @@ void Player::display_stats() {
 };
 
 void Player::inventory_menu() {
-    int choice = -1;
-    while(choice != 0) {
-        while(true) {
-            std::cout << "[Inventory Menu]\n";
-            std::cout << "You have " << gold << " gold pieces.\n";
-            std::cout << "Please enter a corresponding number for the following menu options.\n";
-            std::cout << "(0) Go back\n";
-            for(int i = 0; i < inventory.size(); i++) {
-                std::cout << "(" << i + 1 << ") View options - ";
-                std::cout << inventory[i]->ITEM_NAME << "\n";
-            }
-            std::cout << "(" << inventory.size() + 1 << ") View equipped " << weapon_slot->ITEM_NAME << "\n";
-            std::cout << "(" << inventory.size() + 2 << ") Quit game\n";
+    std::vector<std::pair<std::string, std::function<void()>>> menu_items;
 
-            std::cout << "Choice: ";
-            std::cin >> choice;
-            print_separator();
+    do {
+        std::cout << "You have " << gold << " gold pieces.\n\n";
+        std::cout << "[Inventory Menu]\n";
 
-            if(!std::cin.fail()) break;
-            
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Please enter a valid integer.\n\n";
+        menu_items.clear();
+
+        menu_items.push_back(std::make_pair(
+            "View equipped " + weapon_slot->ITEM_NAME,
+            [this]() -> void {
+                if(weapon_slot->ID == 200) {
+                    std::cout << "There's no reason to stand around examining your fists.\n";
+                } else {
+                    weapon_menu();
+                }
+            }));
+
+        for(int i = 0; i < inventory.size(); i++) {
+            menu_items.push_back(std::make_pair(
+                "View options - " + inventory[i]->ITEM_NAME,
+                [this, i]() -> void {
+                    inventory[i]->display_item_options();
+                }));
         }
 
-        if(choice >= 1 && choice <= inventory.size()) {
-            inventory[choice - 1]->display_item_options();
-        } else if(choice == inventory.size() + 1) {
-            if(weapon_slot->ID == 200) {
-                std::cout << "There's no reason to stand around examining your fists.\n\n";
-            } else {
-                weapon_menu();
-            }
-        } else if(choice == inventory.size() + 2) {
-            exit(-1);
-        } else if(choice != 0) {
-            std::cout << "Please enter a valid option.\n\n";
-        }
-    }
+    } while(print_menu(menu_items));
 };
 
 void Player::weapon_menu() {
-    // This cannot fail as you're only able to equip weapons
-    Weapon* weapon = static_cast<Weapon*>(weapon_slot);
-    int choice;
-    while(true) {
+    std::vector<std::pair<std::string, std::function<void()>>> menu_items;
+
+    do {
+        // This cannot fail as you're only able to equip weapons
+        Weapon* weapon = static_cast<Weapon*>(weapon_slot);
+        std::cout << "Your " << weapon->ITEM_NAME << " has an attack modifier of " << weapon->ATTACK_MOD << "\n\n";
         std::cout << "[Equipped Weapon Menu]\n";
-        std::cout << "Your " << weapon->ITEM_NAME << " has an attack modifier of " << weapon->ATTACK_MOD << "\n";
-        std::cout << "Please enter a corresponding number for the following menu options.\n";
-        std::cout << "(0) Go back\n";
-        std::cout << "(1) Unequip " << weapon->ITEM_NAME << "\n";
-        std::cout << "(2) Quit game\n";
 
-        std::cout << "Choice: ";
-        std::cin >> choice;
-        print_separator();
+        menu_items.clear();
 
-        if(!std::cin.fail()) break;
-        
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Please enter a valid integer.\n\n";
-    }
+        menu_items.push_back(std::make_pair(
+            "Unequip " + weapon->ITEM_NAME,
+            [this, weapon]() -> void {
+                if(weapon->ID == 200) {
+                    std::cout << "You try to remove your fists... but you fail. Congratulations, your fists are now sore.\n\n";
+                    return;
+                } else {
+                    inventory.push_back(weapon_slot);
+                    weapon_slot = get_item(200);
+                    std::cout << "You are no longer wielding your " << weapon->ITEM_NAME << ".\n\n";
+                    return;
+                }
+            }));
 
-    switch(choice) {
-        case 0:
-            return;
-        case 1:
-            if(weapon->ID == 200) {
-                std::cout << "You try to remove your fists... but you fail. Congratulations, your fists are now sore.\n\n";
-                return;
-            } else {
-                inventory.push_back(weapon_slot);
-                weapon_slot = get_item(200);
-                std::cout << "You are no longer wielding your " << weapon->ITEM_NAME << ".\n\n";
-                return;
-            }
-            break;
-        case 2:
-            exit(-1);
-        default:
-            std::cout << "Please enter a valid option.\n\n";
-            inventory_menu();
-            break;
-    }
+    } while(print_menu(menu_items));
 };
 
 std::string Player::get_save_data() {
