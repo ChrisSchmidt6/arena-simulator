@@ -1,4 +1,19 @@
+#include <random>
+
 #include "Enemy.h"
+#include "assets.h"
+
+void Enemy::generate_enemy() {
+    // Pick random name from list of enemy names
+
+    std::random_device rd;
+    std::mt19937 mt(rd());
+
+    std::uniform_int_distribution<int> distribution(0, enemy_names.size() - 1);
+
+    std::cout << enemy_names[distribution(mt)] << "\n";
+    //Enemy new_enemy();
+}
 
 void Enemy::display_stats() {
     std::cout << "Attack: " << attack << "\n";

@@ -6,6 +6,7 @@
 #include "Game.h"
 #include "Player.h"
 #include "utility.h"
+#include "arena.h"
 
 void Game::start() {
     std::cout << "Welcome to Arena Simulator!\n\n";
@@ -44,7 +45,7 @@ void Game::main_menu() {
             active = false;
             break;
         case 1: {
-            std::cout << "Entering combat!\n\n";
+            arena_menu();
             break;
         }
         case 2: {

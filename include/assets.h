@@ -44,4 +44,9 @@ inline std::vector<Item*> item_container {
     new Weapon(216, "Iron Rapier", VenType::Blacksmith, 35, 3, Rarity::Rare, true, 14),
 };
 
+inline std::vector<std::string> enemy_names {
+    "Glorg", "Xandra", "Schmop", "Liev", "Treck", "Youp",
+    "Enh", "Wamza", "Egbert", "Bob", "Barmalpath", "Chaz"
+};
+
 Item* get_item(const unsigned int ID);
