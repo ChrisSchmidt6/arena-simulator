@@ -60,6 +60,24 @@ void Player::display_stats() {
     std::cout << "Experience: " << experience << "\n";
 };
 
+int Player::get_stat(std::string stat) {
+    if(stat == "Max Health") {
+        return max_health;
+    } else if(stat == "Health") {
+        return health;
+    } else if(stat == "Attack") {
+        return attack;
+    } else if(stat == "Defense") {
+        return defense;
+    } else if(stat == "Level") {
+        return level;
+    } else if(stat == "Experience") {
+        return experience;
+    } else {
+        throw std::invalid_argument("std::string stat must be a valid Player statistic");
+    }
+};
+
 void Player::inventory_menu() {
     pairVec menu_items;
 

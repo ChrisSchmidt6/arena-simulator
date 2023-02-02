@@ -14,10 +14,11 @@ struct Player {
 
     void insert_item(Item* item);
     bool remove_item(Item* item);
-    int has_item(Item* item);
     bool buy_item(Item* item);
+    int has_item(Item* item); // returns position of item in inventory, -1 if not found
     void equip_weapon(Item* weapon);
     void display_stats();
+    int get_stat(std::string stat);
     void inventory_menu();
     void weapon_menu();
     std::string get_save_data();

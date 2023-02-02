@@ -2,6 +2,7 @@
 
 #include "Enemy.h"
 #include "assets.h"
+#include "Player.h"
 
 void Enemy::generate_enemy() {
     // Pick random name from list of enemy names
@@ -12,6 +13,12 @@ void Enemy::generate_enemy() {
     std::uniform_int_distribution<int> distribution(0, enemy_names.size() - 1);
 
     std::cout << enemy_names[distribution(mt)] << "\n";
+
+    Player& player = Player::get();
+
+    const int tier = player.get_stat("Level");
+
+    std::cout << tier << "\n";
     //Enemy new_enemy();
 }
 

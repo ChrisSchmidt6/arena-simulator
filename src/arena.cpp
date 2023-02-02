@@ -2,7 +2,7 @@
 
 #include "arena.h"
 #include "utility.h"
-//#include "Enemy.h"
+#include "Enemy.h"
 
 void arena_menu() {
     pairVec menu_items;
@@ -14,7 +14,7 @@ void arena_menu() {
         menu_items.clear();
 
         menu_items.push_back(std::make_pair("Fight", []() -> void {
-            //Enemy::generate_enemy();
+            Enemy::generate_enemy();
             std::cout << "The fight starts!\n";
         }));
 
