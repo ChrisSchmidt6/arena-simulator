@@ -2,23 +2,31 @@
 
 #include <iostream>
 
-#include "Weapon.h"
+#include "Item.h"
 
 struct Enemy {
-    Enemy(std::string name, unsigned int attack, unsigned int defense, unsigned int health,
-        unsigned int level, unsigned int gold, Weapon weapon):
-        name(name), attack(attack), defense(defense), health(health),
-        level(level), gold(gold), weapon(weapon) {};
+    Enemy(std::string name, unsigned int max_health, unsigned int health,
+        unsigned int attack, unsigned int accuracy, unsigned int defense,
+        unsigned int level, unsigned int experience_rewarded,
+        unsigned int gold, unsigned int drop_weapon_chance, Item* weapon):
+        name(name), max_health(max_health), health(health),
+        attack(attack), accuracy(accuracy), defense(defense),
+        level(level), experience_rewarded(experience_rewarded),
+        gold(gold), drop_weapon_chance(drop_weapon_chance), weapon(weapon) {};
 
-    static void generate_enemy();
+    static Enemy generate_enemy(const unsigned int tier);
     void display_stats();
     unsigned int get_defense();
 private:
     const std::string name;
-    unsigned int attack;
-    unsigned int defense;
+    unsigned int max_health;
     unsigned int health;
+    unsigned int attack;
+    unsigned int accuracy;
+    unsigned int defense;
     unsigned int level;
+    unsigned int experience_rewarded;
     unsigned int gold;
-    Weapon weapon;
+    unsigned int drop_weapon_chance;
+    Item* weapon;
 };
