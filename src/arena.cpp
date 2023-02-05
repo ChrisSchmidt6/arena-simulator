@@ -39,13 +39,13 @@ void arena_fight() {
     do {
         std::cout << "[Fight Menu]\n";
 
-        // Enemy picks move
         // 1 = attack, 2 = focused attack, 3 = defend
         std::vector<int> enemy_moves { 1, 2, 3 };
         if(enemy.is_focused()) enemy_moves.erase(enemy_moves.begin() + 1);
         if(enemy.is_defending()) enemy_moves.erase(enemy_moves.begin() + 2);
 
         std::uniform_int_distribution<int> move_dist(0, enemy_moves.size() - 1);
+        // Enemy picks move
         int move = enemy_moves[move_dist(mt)];
         
         arena_pre_round_checks(enemy);

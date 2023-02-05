@@ -1,5 +1,4 @@
 #include <random>
-#include <iostream> // remember to remove later
 
 #include "Combat.h"
 
@@ -17,11 +16,7 @@ bool Combat::accuracy_roll(int opponent_defense) {
     std::mt19937 mt(rd());
 
     int temp_accuracy = accuracy;
-    if(is_focused()) {
-        std::cout << get_name() << " is accurate, accuracy up from "
-            << accuracy << " to " << (accuracy * 2) << "\n";
-        temp_accuracy += accuracy;
-    }
+    if(is_focused()) temp_accuracy += accuracy;
 
     int hit_scale = opponent_defense - temp_accuracy;
     // hit_chance min is -12 and max is 12 (30% loss vs 30% gain)
@@ -35,14 +30,11 @@ bool Combat::accuracy_roll(int opponent_defense) {
 };
 
 int Combat::damage_roll() {
-    // Probably will be tweaked in the future
+    // (Attack stat + weapon modifier) / 2
+    // Will likely be tweaked in the future
     int max_damage = (attack + get_weapon()->ATTACK_MOD) / 2;
 
-    if(is_weakened()) {
-        std::cout << get_name() << " is weak, max down from "
-            << max_damage << " to " << (max_damage / 2) << "\n";
-        max_damage /= 2;
-    }
+    if(is_weakened()) max_damage /= 2;
     // Minimum damage of 1
     if(max_damage == 0) return 1;
 
