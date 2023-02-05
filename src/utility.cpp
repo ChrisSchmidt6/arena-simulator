@@ -10,15 +10,22 @@ void print_separator() {
     std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 }
 
-bool print_menu(pairVec menu_items) {
+bool print_menu(pairVec menu_items, bool print_plain) {
     int choice = -1;
     while(true) {
         std::cout << "Please enter a corresponding number for the following menu options.\n";
-        std::cout << "(0) Go back\n";
-        for(int i = 0; i < menu_items.size(); i++) {
-            std::cout << "(" << (i + 1) << ") " << menu_items[i].first << "\n";
+
+        if(print_plain) {
+            for(int i = 0; i < menu_items.size(); i++) {
+                std::cout << "(" << (i + 1) << ") " << menu_items[i].first << "\n";
+            }
+        } else {
+            std::cout << "(0) Go back\n";
+            for(int i = 0; i < menu_items.size(); i++) {
+                std::cout << "(" << (i + 1) << ") " << menu_items[i].first << "\n";
+            }
+            std::cout << "(" << menu_items.size() + 1 << ") Quit game\n";
         }
-        std::cout << "(" << menu_items.size() + 1 << ") Quit game\n";
 
         std::cout << "Choice: ";
         std::cin >> choice;
@@ -31,16 +38,26 @@ bool print_menu(pairVec menu_items) {
         std::cout << "Please enter a valid integer.\n\n";
     }
 
-    if(choice > 0 && choice <= menu_items.size()) {
-        // Call function associated with menu choice
-        menu_items[choice - 1].second();
-    } else if(choice == menu_items.size() + 1) {
-        exit(-1);
-    } else if(choice == 0) {
-        return false;
+    if(print_plain) {
+        if(choice > 0 && choice < menu_items.size()) {
+            // Call function associated with menu choice
+            menu_items[choice - 1].second();
+        } else {
+            std::cout << "Please enter a valid option.\n\n";
+        }
     } else {
-        std::cout << "Please enter a valid option.\n\n";
+        if(choice > 0 && choice <= menu_items.size()) {
+            // Call function associated with menu choice
+            menu_items[choice - 1].second();
+        } else if(choice == menu_items.size() + 1) {
+            exit(-1);
+        } else if(choice == 0) {
+            return false;
+        } else {
+            std::cout << "Please enter a valid option.\n\n";
+        }
     }
+
     return true;
 }
 

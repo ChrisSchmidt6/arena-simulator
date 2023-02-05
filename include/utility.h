@@ -8,7 +8,7 @@
 typedef std::vector<std::pair<std::string, std::function<void()>>> pairVec;
 
 void print_separator();
-bool print_menu(pairVec menu_items);
+bool print_menu(pairVec menu_items, bool print_plain = false);
 
 void save_to_file();
 bool load_save_file();
