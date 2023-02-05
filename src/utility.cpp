@@ -39,7 +39,7 @@ bool print_menu(pairVec menu_items, bool print_plain) {
     }
 
     if(print_plain) {
-        if(choice > 0 && choice < menu_items.size()) {
+        if(choice > 0 && choice <= menu_items.size()) {
             // Call function associated with menu choice
             menu_items[choice - 1].second();
         } else {
