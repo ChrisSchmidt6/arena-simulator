@@ -51,13 +51,8 @@ void Player::equip_weapon(Item* weapon) {
     else inventory.erase(inventory.begin() + inventory_location);
 };
 
-void Player::display_stats() {
-    std::cout << "Max Health: " << max_health << "\n";
-    std::cout << "Health: " << health << "\n";
-    std::cout << "Attack: " << attack << "\n";
-    std::cout << "Defense: " << defense << "\n";
-    std::cout << "Level: " << level << "\n";
-    std::cout << "Experience: " << experience << "\n";
+std::string Player::get_name() {
+    return name;
 };
 
 int Player::get_stat(std::string stat) {
@@ -67,6 +62,8 @@ int Player::get_stat(std::string stat) {
         return health;
     } else if(stat == "Attack") {
         return attack;
+    } else if(stat == "Accuracy") {
+        return accuracy;
     } else if(stat == "Defense") {
         return defense;
     } else if(stat == "Level") {
@@ -76,6 +73,16 @@ int Player::get_stat(std::string stat) {
     } else {
         throw std::invalid_argument("std::string stat must be a valid Player statistic");
     }
+};
+
+void Player::display_stats() {
+    std::cout << "Max Health: " << max_health << "\n";
+    std::cout << "Health: " << health << "\n";
+    std::cout << "Attack: " << attack << "\n";
+    std::cout << "Accuracy: " << accuracy << "\n";
+    std::cout << "Defense: " << defense << "\n";
+    std::cout << "Level: " << level << "\n";
+    std::cout << "Experience: " << experience << "\n";
 };
 
 void Player::inventory_menu() {
@@ -112,8 +119,7 @@ void Player::weapon_menu() {
     pairVec menu_items;
 
     do {
-        // This cannot fail as you're only able to equip weapons
-        Weapon* weapon = static_cast<Weapon*>(weapon_slot);
+        Weapon* weapon = get_weapon();
         std::cout << "Your " << weapon->ITEM_NAME << " has an attack modifier of " << weapon->ATTACK_MOD << "\n\n";
         std::cout << "[Equipped Weapon Menu]\n";
 
@@ -142,6 +148,7 @@ std::string Player::get_save_data() {
     ss << "Max Health: " << max_health << "\n";
     ss << "Health: " << health << "\n";
     ss << "Attack: " << attack << "\n";
+    ss << "Accuracy: " << accuracy << "\n";
     ss << "Defense: " << defense << "\n";
     ss << "Level: " << level << "\n";
     ss << "Experience: " << experience << "\n";
@@ -178,18 +185,21 @@ bool Player::load_save_data(std::string &save_data) {
                     attack = parsed_stat;
                     break;
                 case 3:
-                    defense = parsed_stat;
+                    accuracy = parsed_stat;
                     break;
                 case 4:
-                    level = parsed_stat;
+                    defense = parsed_stat;
                     break;
                 case 5:
-                    experience = parsed_stat;
+                    level = parsed_stat;
                     break;
                 case 6:
-                    gold = parsed_stat;
+                    experience = parsed_stat;
                     break;
                 case 7:
+                    gold = parsed_stat;
+                    break;
+                case 8:
                     weapon_slot = get_item(parsed_stat);
                     break;
                 default:

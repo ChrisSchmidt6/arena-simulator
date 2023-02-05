@@ -1,9 +1,10 @@
 #pragma once
 
+#include "Combat.h"
 #include "Item.h"
 #include "assets.h"
 
-struct Player {
+struct Player : Combat {
     Player(const Player&) = delete;
     static Player& get() {
         static Player player_instance;
@@ -12,13 +13,15 @@ struct Player {
 
     std::string name;
 
+    std::string get_name() override;
+    int get_stat(std::string stat) override;
+    void display_stats() override;
+
     void insert_item(Item* item);
     bool remove_item(Item* item);
     bool buy_item(Item* item);
     int has_item(Item* item); // returns position of item in inventory, -1 if not found
     void equip_weapon(Item* weapon);
-    void display_stats();
-    int get_stat(std::string stat);
     void inventory_menu();
     void weapon_menu();
     std::string get_save_data();
@@ -26,13 +29,6 @@ struct Player {
 private:
     Player() {}
     
-    unsigned int max_health = 10; // save line 1
-    unsigned int health = 10; // Save line 2
-    unsigned int attack = 1; // Save line 3
-    unsigned int defense = 1; // Save line 4
-    unsigned int level = 1; // Save line 5
-    unsigned int experience = 0; // Save line 6
-    unsigned int gold = 10; // Save line 7
-    Item* weapon_slot = get_item(200); // Save line 8
-    std::vector<Item*> inventory; // Save line 9+
+    unsigned int experience = 0;
+    std::vector<Item*> inventory;
 };
