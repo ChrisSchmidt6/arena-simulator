@@ -17,7 +17,7 @@ bool print_menu(pairVec menu_items, bool print_plain) {
 
         if(print_plain) {
             for(int i = 0; i < menu_items.size(); i++) {
-                std::cout << "(" << (i + 1) << ") " << menu_items[i].first << "\n";
+                std::cout << "(" << (i) << ") " << menu_items[i].first << "\n";
             }
         } else {
             std::cout << "(0) Go back\n";
@@ -39,9 +39,9 @@ bool print_menu(pairVec menu_items, bool print_plain) {
     }
 
     if(print_plain) {
-        if(choice > 0 && choice <= menu_items.size()) {
+        if(choice >= 0 && choice < menu_items.size()) {
             // Call function associated with menu choice
-            menu_items[choice - 1].second();
+            menu_items[choice].second();
         } else {
             std::cout << "Please enter a valid option.\n\n";
         }
