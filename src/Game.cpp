@@ -18,100 +18,71 @@ bool Game::is_running() {
 };
 
 void Game::main_menu() {
-    int choice;
-    while(true) {
+    pairVec menu_items;
+    // Return early if Quit game is selected
+    bool return_early = false;
+    
+    do {
         std::cout << "[Main Menu]\n";
-        std::cout << "Please enter a corresponding number for the following menu options.\n";
-        std::cout << "(0) Exit\n";
-        std::cout << "(1) Enter arena\n";
-        std::cout << "(2) Go to vendors\n";
-        std::cout << "(3) Display statistics\n";
-        std::cout << "(4) Display inventory\n";
-        std::cout << "(5) Save character\n";
+        menu_items.clear();
 
-        std::cout << "Choice: ";
-        std::cin >> choice;
-        print_separator();
-
-        if(!std::cin.fail()) break;
-        
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Please enter a valid integer.\n\n";
-    }
-
-    switch(choice) {
-        case 0:
+        menu_items.push_back(std::make_pair("Quit game", [this, &return_early]() -> void {
             active = false;
-            break;
-        case 1: {
+            return_early = true;
+        }));
+
+        menu_items.push_back(std::make_pair("Enter arena", []() -> void {
             arena_menu();
-            break;
-        }
-        case 2: {
+        }));
+
+        menu_items.push_back(std::make_pair("Go to market", [this]() -> void {
             Vendor::main_menu(apothecary, blacksmith, chef);
-            break;
-        }
-        case 3:
+        }));
+
+        menu_items.push_back(std::make_pair("Display statistics", []() -> void {
             Player::get().display_stats();
             pause_until_enter();
-            break;
-        case 4:
+        }));
+
+        menu_items.push_back(std::make_pair("Display inventory", []() -> void {
             Player::get().inventory_menu();
-            break;
-        case 5:
+        }));
+
+        menu_items.push_back(std::make_pair("Save character", []() -> void {
             save_to_file();
             std::cout << "Your character has been saved.\n";
             pause_until_enter();
-            break;
-        default:
-            std::cout << "Please enter a valid option.\n\n";
-            break;
-    }
+        }));
+    } while(print_menu(menu_items, true) && !return_early);
 };
 
 bool Game::initiate_character() {
-    int choice = -1;
-    while(choice != 0) {
-        while(true) {
-            std::cout << "[Start Menu]\n";
-            std::cout << "Please enter a corresponding number for the following menu options.\n";
-            std::cout << "(0) Exit\n";
-            std::cout << "(1) Load character\n";
-            std::cout << "(2) Create character\n";
+    pairVec menu_items;
 
-            std::cout << "Choice: ";
-            std::cin >> choice;
-            print_separator();
+    bool success_initiating = false;
+    
+    std::cout << "[Start Menu]\n";
 
-            if(!std::cin.fail()) break;
-            
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Please enter a valid integer.\n\n";
-        }
+    menu_items.push_back(std::make_pair("Exit", [this]() -> void {
+        active = false;
+    }));
 
-        switch(choice) {
-            case 0:
-                return false;
-            case 1:
-                std::cout << "Please enter the name of the character you'd like to load: ";
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::getline(std::cin, Player::get().name);
-                std::cout << "\n";
-                if(load_save_file()) return true;
-                break;
-            case 2:
-                std::cout << "Please enter the name of your new character: ";
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::getline(std::cin, Player::get().name);
-                std::cout << "\n";
-                if(create_save_file()) return true;
-                break;
-            default:
-                std::cout << "Please enter a valid option.\n\n";
-                break;
-        }
-    }
-    return false;
+    menu_items.push_back(std::make_pair("Create character", [&success_initiating]() -> void {
+        std::cout << "Please enter the name of your new character: ";
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::getline(std::cin, Player::get().name);
+        std::cout << "\n";
+        if(create_save_file()) success_initiating = true;
+    }));
+
+    menu_items.push_back(std::make_pair("Load character", [&success_initiating]() -> void {
+        std::cout << "Please enter the name of the character you'd like to load: ";
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::getline(std::cin, Player::get().name);
+        std::cout << "\n";
+        if(load_save_file()) success_initiating = true;
+    }));
+    print_menu(menu_items, true);
+
+    return success_initiating;
 };
