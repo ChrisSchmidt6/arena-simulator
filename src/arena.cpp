@@ -56,6 +56,9 @@ void arena_fight() {
 
         menu_items.clear();
 
+        // Insert blank so that fight options start at 1 instead of 0
+        menu_items.push_back(std::make_pair("Blank", []() -> void {}));
+
         menu_items.push_back(std::make_pair("Attack", [&enemy]() -> void {
             arena_pre_round_checks(Player::get());
             // Regular attack
