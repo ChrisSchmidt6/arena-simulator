@@ -15,17 +15,14 @@ bool print_menu(pairVec menu_items, bool print_plain) {
     while(true) {
         std::cout << "Please enter a corresponding number for the following menu options.\n";
 
-        if(print_plain) {
-            for(int i = 0; i < menu_items.size(); i++) {
-                std::cout << "(" << (i) << ") " << menu_items[i].first << "\n";
-            }
-        } else {
-            std::cout << "(0) Go back\n";
-            for(int i = 0; i < menu_items.size(); i++) {
-                std::cout << "(" << (i + 1) << ") " << menu_items[i].first << "\n";
-            }
-            std::cout << "(" << menu_items.size() + 1 << ") Quit game\n";
+        if(!print_plain) std::cout << "(0) Go back\n";
+        for(int i = 0; i < menu_items.size(); i++) {
+            // Allow for blank menu options
+            if(menu_items[i].first == "Blank") continue;
+            int option = print_plain ? i : i + 1;
+            std::cout << "(" << (option) << ") " << menu_items[i].first << "\n";
         }
+        if(!print_plain) std::cout << "(" << menu_items.size() + 1 << ") Quit game\n";
 
         std::cout << "Choice: ";
         std::cin >> choice;
