@@ -6,7 +6,6 @@
 #include "Game.h"
 #include "Player.h"
 #include "utility.h"
-#include "Arena.h"
 
 void Game::start() {
     std::cout << "Welcome to Arena Simulator!\n\n";
@@ -31,8 +30,8 @@ void Game::main_menu() {
             return_early = true;
         }));
 
-        menu_items.push_back(std::make_pair("Enter arena", []() -> void {
-            arena_menu();
+        menu_items.push_back(std::make_pair("Enter arena", [this]() -> void {
+            arena.main_menu();
         }));
 
         menu_items.push_back(std::make_pair("Go to market", [this]() -> void {

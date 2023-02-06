@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Arena.h"
 #include "Vendor.h"
 
 struct Game {
@@ -16,6 +17,8 @@ private:
     Game() {}
 
     bool active = false;
+
+    Arena arena;
     
     Vendor apothecary = Vendor("Sandra", 1, VenType::Apothecary);
     Vendor blacksmith = Vendor("Bob", 1, VenType::Blacksmith);

@@ -6,7 +6,7 @@
 #include "Player.h"
 #include "Enemy.h"
 
-void arena_menu() {
+void Arena::main_menu() {
     pairVec menu_items;
 
     do {
@@ -15,20 +15,21 @@ void arena_menu() {
 
         menu_items.clear();
 
-        menu_items.push_back(std::make_pair("Fight", []() -> void {
-            arena_fight();
+        menu_items.push_back(std::make_pair("Fight", [this]() -> void {
+            fight_menu();
         }));
 
-        menu_items.push_back(std::make_pair("Train", []() -> void {
-            arena_train();
+        menu_items.push_back(std::make_pair("Train", [this]() -> void {
+            train_menu();
         }));
 
     } while(print_menu(menu_items));
 };
 
-void arena_fight() {
-    const int tier = Player::get().get_stat("Level");
-    Enemy enemy = Enemy::generate_enemy(tier);
+void Arena::fight_menu() {
+    const int tier = player.get_stat("Level");
+    // Generate new enemy if previously generated enemy is lower level
+    if(enemy.get_stat("Level") < tier) enemy = Enemy::generate_enemy(tier);
     std::random_device rd;
     std::mt19937 mt(rd());
 
@@ -48,7 +49,7 @@ void arena_fight() {
         // Enemy picks move
         int move = enemy_moves[move_dist(mt)];
         
-        arena_pre_round_checks(enemy);
+        pre_round_checks(enemy);
 
         // Set enemy to defending if that was chosen
         if(move == 2) enemy.toggle_focused();
@@ -59,57 +60,61 @@ void arena_fight() {
         // Insert blank so that fight options start at 1 instead of 0
         menu_items.push_back(std::make_pair("Blank", []() -> void {}));
 
-        menu_items.push_back(std::make_pair("Attack", [&enemy]() -> void {
-            arena_pre_round_checks(Player::get());
+        menu_items.push_back(std::make_pair("Attack", [this]() -> void {
+            pre_round_checks(player);
             // Regular attack
-            arena_attack(Player::get(), enemy);
+            process_attack(player, enemy);
             if(!enemy.is_alive()) return;
             // Process enemy attack if not defending
-            if(!enemy.is_defending()) arena_attack(enemy, Player::get());
+            if(!enemy.is_defending()) process_attack(enemy, player);
         }));
 
-        if(!Player::get().is_focused()) {
-            menu_items.push_back(std::make_pair("Focused Attack", [&enemy]() -> void {
-                arena_pre_round_checks(Player::get());
+        if(!player.is_focused()) {
+            menu_items.push_back(std::make_pair("Focused Attack", [this]() -> void {
+                pre_round_checks(player);
                 // Double accuracy this turn, half damage next turn
-                Player::get().toggle_focused();
-                arena_attack(Player::get(), enemy);
+                player.toggle_focused();
+                process_attack(player, enemy);
                 if(!enemy.is_alive()) return;
                 // Process enemy attack if not defending
-                if(!enemy.is_defending()) arena_attack(enemy, Player::get());
+                if(!enemy.is_defending()) process_attack(enemy, player);
             }));
         }
 
-        if(!Player::get().is_defending()) {
-            menu_items.push_back(std::make_pair("Defend", [&enemy]() -> void {
-                arena_pre_round_checks(Player::get());
+        if(!player.is_defending()) {
+            menu_items.push_back(std::make_pair("Defend", [this]() -> void {
+                pre_round_checks(player);
                 // Double defense for a turn
-                Player::get().toggle_defending();
+                player.toggle_defending();
                 // Process enemy attack if not defending
-                if(!enemy.is_defending()) arena_attack(enemy, Player::get());
+                if(!enemy.is_defending()) process_attack(enemy, player);
                 else std::cout << "Both fighters stare at each other blankly, "
                     << "wondering whether they would be friends in another reality..\n";
             }));
         }
 
-        menu_items.push_back(std::make_pair("Check Consumables", [&enemy]() -> void {
-            arena_pre_round_checks(Player::get());
+        menu_items.push_back(std::make_pair("Check Consumables", [this]() -> void {
+            pre_round_checks(player);
             // Player::check_consumables();
-            if(!enemy.is_defending()) arena_attack(enemy, Player::get());
+            if(!enemy.is_defending()) process_attack(enemy, player);
         }));
 
-    } while(print_menu(menu_items, true) && Player::get().is_alive() && enemy.is_alive());
+    } while(print_menu(menu_items, true) && player.is_alive() && enemy.is_alive());
 
     if(!enemy.is_alive()) {
         // Handle enemy death
         std::cout << "Enemy death\n";
-    } else if(!Player::get().is_alive()) {
+    } else if(!player.is_alive()) {
         // Handle player death
         std::cout << "Player death\n";
     }
 };
 
-void arena_pre_round_checks(Combat &fighter) {
+void Arena::train_menu() {
+    std::cout << "You will have to pay gold to train.\n";
+};
+
+void Arena::pre_round_checks(Combat &fighter) {
     if(fighter.is_defending()) fighter.toggle_defending();
 
     if(fighter.is_weakened() && fighter.is_focused()) {
@@ -119,7 +124,7 @@ void arena_pre_round_checks(Combat &fighter) {
     }
 };
 
-void arena_attack(Combat &attacker, Combat &defender) {
+void Arena::process_attack(Combat &attacker, Combat &defender) {
     int e_health = defender.get_stat("Health");
     int e_defense = defender.get_stat("Defense");
     if(defender.is_defending()) {
@@ -151,8 +156,4 @@ void arena_attack(Combat &attacker, Combat &defender) {
     // Set weakened to true, if this was a focused hit
     if(attacker.is_focused()) attacker.toggle_weakened();
     pause_until_enter();
-};
-
-void arena_train() {
-    std::cout << "You will have to pay gold to train.\n";
 };
