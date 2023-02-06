@@ -35,6 +35,8 @@ void Vendor::main_menu(Vendor& apothecary, Vendor& blacksmith, Vendor& chef) {
 void Vendor::buy_menu() {
     pairVec menu_items;
 
+    std::cout << "You have " << Player::get().get_stat("Gold") << " gold pieces to spend.\n\n";
+
     do {
         std::cout << "[Vendor Purchase Menu]\n";
 

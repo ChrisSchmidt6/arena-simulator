@@ -70,6 +70,8 @@ int Player::get_stat(std::string stat) {
         return level;
     } else if(stat == "Experience") {
         return experience;
+    } else if(stat == "Gold") {
+        return gold;
     } else {
         throw std::invalid_argument("std::string stat must be a valid Player statistic");
     }
