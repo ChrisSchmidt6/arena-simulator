@@ -61,7 +61,8 @@ void Game::main_menu() {
             break;
         case 5:
             save_to_file();
-            std::cout << "Saved your character.\n\n";
+            std::cout << "Your character has been saved.\n";
+            pause_until_enter();
             break;
         default:
             std::cout << "Please enter a valid option.\n\n";
