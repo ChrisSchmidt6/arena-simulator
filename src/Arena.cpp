@@ -1,7 +1,7 @@
 #include <iostream>
 #include <random>
 
-#include "arena.h"
+#include "Arena.h"
 #include "utility.h"
 #include "Player.h"
 #include "Enemy.h"

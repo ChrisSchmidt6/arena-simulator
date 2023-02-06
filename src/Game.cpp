@@ -6,7 +6,7 @@
 #include "Game.h"
 #include "Player.h"
 #include "utility.h"
-#include "arena.h"
+#include "Arena.h"
 
 void Game::start() {
     std::cout << "Welcome to Arena Simulator!\n\n";
