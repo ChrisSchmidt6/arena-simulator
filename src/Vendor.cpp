@@ -49,6 +49,8 @@ void Vendor::buy_menu() {
                 [item, this, i]() -> void {
                     if(Player::get().buy_item(item)) {
                         remove_item(i);
+                        std::cout << "You have purchased the " << item->ITEM_NAME << " for " << item->PRICE << " gold pieces.\n";
+                        pause_until_enter();
                     } else {
                         std::cout << "You do not have enough gold pieces for that item.\n\n";
                     }

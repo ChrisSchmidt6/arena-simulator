@@ -54,7 +54,7 @@ void Game::main_menu() {
         }
         case 3:
             Player::get().display_stats();
-            std::cout << "\n";
+            pause_until_enter();
             break;
         case 4:
             Player::get().inventory_menu();

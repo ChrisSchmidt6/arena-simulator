@@ -147,6 +147,7 @@ void arena_attack(Combat &attacker, Combat &defender) {
 
     // Set weakened to true, if this was a focused hit
     if(attacker.is_focused()) attacker.toggle_weakened();
+    pause_until_enter();
 };
 
 void arena_train() {
