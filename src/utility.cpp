@@ -61,6 +61,13 @@ bool print_menu(pairVec menu_items, bool print_plain) {
     return true;
 }
 
+void pause_until_enter() {
+    std::cout << "Press Enter to continue ...\n";
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    while(std::cin.peek() != '\n') { std::cin.get(); }
+    print_separator();
+}
+
 std::string directory = "saves/";
 
 void save_to_file() {
