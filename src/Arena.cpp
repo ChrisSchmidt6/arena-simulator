@@ -37,23 +37,27 @@ void Arena::fight_menu() {
 
     pairVec menu_items;
 
+    int enemy_move;
+
     do {
         std::cout << "[Fight Menu]\n";
 
-        // 1 = attack, 2 = focused attack, 3 = defend
-        std::vector<int> enemy_moves { 1, 2, 3 };
-        if(enemy.is_focused()) enemy_moves.erase(enemy_moves.begin() + 1);
-        if(enemy.is_defending()) enemy_moves.erase(enemy_moves.begin() + 2);
+        if(continue_round) {
+            // 1 = attack, 2 = focused attack, 3 = defend
+            std::vector<int> enemy_move_pool { 1, 2, 3 };
+            if(enemy.is_focused()) enemy_move_pool.erase(enemy_move_pool.begin() + 1);
+            if(enemy.is_defending()) enemy_move_pool.erase(enemy_move_pool.begin() + 2);
 
-        std::uniform_int_distribution<int> move_dist(0, enemy_moves.size() - 1);
-        // Enemy picks move
-        int move = enemy_moves[move_dist(mt)];
-        
-        pre_round_checks(enemy);
+            std::uniform_int_distribution<int> move_dist(0, enemy_move_pool.size() - 1);
+            // Enemy picks enemy_move
+            enemy_move = enemy_move_pool[move_dist(mt)];
+            
+            pre_round_checks(enemy);
 
-        // Set enemy to defending if that was chosen
-        if(move == 2) enemy.toggle_focused();
-        if(move == 3) enemy.toggle_defending();
+            // Set enemy to defending if that was chosen
+            if(enemy_move == 2) enemy.toggle_focused();
+            if(enemy_move == 3) enemy.toggle_defending();
+        }
 
         menu_items.clear();
 
@@ -67,6 +71,7 @@ void Arena::fight_menu() {
             if(!enemy.is_alive()) return;
             // Process enemy attack if not defending
             if(!enemy.is_defending()) process_attack(enemy, player);
+            continue_round = true;
         }));
 
         if(!player.is_focused()) {
@@ -78,6 +83,7 @@ void Arena::fight_menu() {
                 if(!enemy.is_alive()) return;
                 // Process enemy attack if not defending
                 if(!enemy.is_defending()) process_attack(enemy, player);
+                continue_round = true;
             }));
         }
 
@@ -88,15 +94,29 @@ void Arena::fight_menu() {
                 player.toggle_defending();
                 // Process enemy attack if not defending
                 if(!enemy.is_defending()) process_attack(enemy, player);
-                else std::cout << "Both fighters stare at each other blankly, "
-                    << "wondering whether they would be friends in another reality..\n";
+                else {
+                    std::cout << "Both fighters stare at each other blankly, "
+                    << "wondering whether they would be friends in another reality..\n"
+                    << "(You both tried to defend)\n";
+                    pause_until_enter();
+                }
+                continue_round = true;
             }));
         }
 
         menu_items.push_back(std::make_pair("Check Consumables", [this]() -> void {
-            pre_round_checks(player);
-            // Player::check_consumables();
-            if(!enemy.is_defending()) process_attack(enemy, player);
+            continue_round = false;
+            std::cout << "Feature in progress\n";
+            pause_until_enter();
+            // If player doesn't use consumable, don't do any of the following
+            // pre_round_checks(player);
+            // if(!enemy.is_defending()) process_attack(enemy, player);
+            // continue_round = true;
+        }));
+
+        menu_items.push_back(std::make_pair("Check Statistics", [this]() -> void {
+            print_stats();
+            continue_round = false;
         }));
 
     } while(print_menu(menu_items, true) && player.is_alive() && enemy.is_alive());
@@ -107,6 +127,8 @@ void Arena::fight_menu() {
     } else if(!player.is_alive()) {
         // Handle player death
         std::cout << "Player death\n";
+    } else {
+        std::cout << "Something went wrong\n";
     }
 };
 
@@ -155,5 +177,21 @@ void Arena::process_attack(Combat &attacker, Combat &defender) {
 
     // Set weakened to true, if this was a focused hit
     if(attacker.is_focused()) attacker.toggle_weakened();
+    pause_until_enter();
+};
+
+void Arena::print_stats() {
+    std::cout << "Names:\t\t" << player.get_name() << "\t" << enemy.get_name() << " [Foe]\n";
+    std::cout << "Health:\t\t"
+        << player.get_stat("Health") << "/" << player.get_stat("Max Health")
+        << "\t" << enemy.get_stat("Health") << "/" << enemy.get_stat("Max Health") << "\n";
+    std::cout << "Attack:\t\t" << player.get_stat("Attack") << "\t" << enemy.get_stat("Attack") << "\n";
+    std::cout << "Acc.:\t\t" << player.get_stat("Accuracy") << "\t" << enemy.get_stat("Accuracy") << "\n";
+    std::cout << "Def.:\t\t" << player.get_stat("Defense") << "\t" << enemy.get_stat("Defense") << "\n";
+    std::cout << "Level:\t\t" << player.get_stat("Level") << "\t" << enemy.get_stat("Level") << "\n";
+    std::cout << player.get_name() << "'s weapon: "
+        << player.get_weapon()->ITEM_NAME << " [+" << player.get_weapon()->ATTACK_MOD << "]\n";
+    std::cout << "[Foe] " << enemy.get_name() << "'s weapon: "
+        << enemy.get_weapon()->ITEM_NAME << " [+" << enemy.get_weapon()->ATTACK_MOD << "]\n";
     pause_until_enter();
 };
