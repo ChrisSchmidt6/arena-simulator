@@ -42,6 +42,23 @@ int Enemy::get_stat(std::string stat) {
     }
 };
 
+int Enemy::gold_reward() {
+    return gold;
+};
+
+bool Enemy::weapon_reward() {
+    std::random_device rd;
+    std::mt19937 mt(rd());
+
+    std::uniform_int_distribution<int> drop_dist(1, 100);
+    bool will_drop = drop_dist(mt) < drop_weapon_chance;
+    return will_drop;
+};
+
+int Enemy::experience_reward() {
+    return experience_rewarded;
+}
+
 void Enemy::display_stats() {
     std::cout << "[" << name << "]\n";
     std::cout << "Health: " << health << "/" << max_health << "\n";

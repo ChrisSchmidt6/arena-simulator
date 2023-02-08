@@ -11,7 +11,7 @@ private:
     // This will also prevent pre_round_checks from running unnecessarily
     // for the enemy
     bool continue_round = true;
-    Combat &player = Player::get();
+    Player &player = Player::get();
     Enemy enemy = Enemy::generate_enemy(Player::get().get_stat("Level"));;
 
     void fight_menu();
@@ -19,4 +19,6 @@ private:
     void pre_round_checks(Combat &fighter);
     void process_attack(Combat &attacker, Combat &defender);
     void print_stats();
+    void player_death(bool training = false);
+    void enemy_death(bool training = false);
 };

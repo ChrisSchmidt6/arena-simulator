@@ -22,13 +22,21 @@ struct Player : Combat {
     bool buy_item(Item* item);
     int has_item(Item* item); // returns position of item in inventory, -1 if not found
     void equip_weapon(Item* weapon);
+    void remove_weapon();
+    int weapon_drop_chance();
+    void increase_gold(int amount);
+    void decrease_gold(int amount);
+    void gain_experience(int amount);
     void inventory_menu();
     void weapon_menu();
+    void reset_health();
+
     std::string get_save_data();
     bool load_save_data(std::string &save_data);
 private:
     Player() {}
     
-    unsigned int experience = 0;
+    int experience = 0;
+    const int lose_weapon_chance = 10;
     std::vector<Item*> inventory;
 };

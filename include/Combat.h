@@ -24,6 +24,7 @@ struct Combat {
     void toggle_weakened();
     bool is_focused();
     bool is_weakened();
+    void clear_cooldowns();
 protected:
     Combat() {};
     virtual ~Combat() {};

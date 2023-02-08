@@ -72,3 +72,9 @@ bool Combat::is_focused() {
 bool Combat::is_weakened() {
     return weakened;
 };
+
+void Combat::clear_cooldowns() {
+    defending = false;
+    focused = false;
+    weakened = false;
+};

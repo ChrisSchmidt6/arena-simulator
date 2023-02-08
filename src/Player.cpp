@@ -51,6 +51,26 @@ void Player::equip_weapon(Item* weapon) {
     else inventory.erase(inventory.begin() + inventory_location);
 };
 
+void Player::remove_weapon() {
+    weapon_slot = get_item(200);
+};
+
+int Player::weapon_drop_chance() {
+    return lose_weapon_chance;
+};
+
+void Player::increase_gold(int amount) {
+    gold += amount;
+};
+
+void Player::decrease_gold(int amount) {
+    gold = amount > gold ? 0 : gold - amount;
+};
+
+void Player::gain_experience(int amount) {
+    experience += amount;
+};
+
 std::string Player::get_name() {
     return name;
 };
@@ -142,6 +162,10 @@ void Player::weapon_menu() {
             }));
 
     } while(print_menu(menu_items));
+};
+
+void Player::reset_health() {
+    health = max_health;
 };
 
 std::string Player::get_save_data() {
