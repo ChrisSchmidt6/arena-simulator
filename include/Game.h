@@ -13,6 +13,8 @@ struct Game {
     void start();
     bool is_running();
     void main_menu();
+    
+    void generate_inventories();
 private:
     Game() {}
 
@@ -20,9 +22,9 @@ private:
 
     Arena arena;
     
-    Vendor apothecary = Vendor("Sandra", 1, VenType::Apothecary);
-    Vendor blacksmith = Vendor("Bob", 1, VenType::Blacksmith);
-    Vendor chef = Vendor("Emeril", 1, VenType::Chef);
+    Vendor apothecary = Vendor(VenType::Apothecary);
+    Vendor blacksmith = Vendor(VenType::Blacksmith);
+    Vendor chef = Vendor(VenType::Chef);
 
     bool initiate_character();
 };

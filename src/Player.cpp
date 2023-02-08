@@ -3,6 +3,7 @@
 #include <sstream>
 #include <string>
 
+#include "Game.h"
 #include "Player.h"
 #include "Weapon.h"
 #include "utility.h"
@@ -180,6 +181,10 @@ void Player::reset_health() {
 void Player::level_up() {
     level++;
     std::cout << "Congratulations, you have leveled up!\n";
+
+    // Regenerate vendor inventories
+    Game::get().generate_inventories();
+
     // Free health increase every 2nd level
     bool health_increase = level % 2;
     if(health_increase) {

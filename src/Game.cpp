@@ -10,6 +10,7 @@
 void Game::start() {
     std::cout << "Welcome to Arena Simulator!\n\n";
     active = initiate_character();
+    if(active) generate_inventories();
 };
 
 bool Game::is_running() {
@@ -53,6 +54,12 @@ void Game::main_menu() {
             pause_until_enter();
         }));
     } while(print_menu(menu_items, true) && !return_early);
+};
+
+void Game::generate_inventories() {
+    apothecary.generate_inventory();
+    blacksmith.generate_inventory();
+    chef.generate_inventory();
 };
 
 bool Game::initiate_character() {

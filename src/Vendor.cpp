@@ -7,10 +7,7 @@
 #include "assets.h"
 #include "utility.h"
 
-Vendor::Vendor(std::string name, unsigned int tier, VenType type):
-    NAME(name), TIER(tier), TYPE(type) {
-        generate_inventory();
-}
+Vendor::Vendor(VenType type): TYPE(type) {};
 
 void Vendor::main_menu(Vendor& apothecary, Vendor& blacksmith, Vendor& chef) {
     pairVec menu_items;
@@ -30,7 +27,7 @@ void Vendor::main_menu(Vendor& apothecary, Vendor& blacksmith, Vendor& chef) {
             chef.buy_menu();
         }));
     } while(print_menu(menu_items));
-}
+};
 
 void Vendor::buy_menu() {
     pairVec menu_items;
@@ -57,21 +54,22 @@ void Vendor::buy_menu() {
                 }));
         }
     } while(print_menu(menu_items));
-}
+};
 
 void Vendor::sell_menu() {
     std::cout << "Let's see what you've got!\n\n";
-}
+};
 
 void Vendor::remove_item(int location) {
     inventory.erase(inventory.begin() + location);
-}
+};
 
 void Vendor::generate_inventory() {
+    inventory.clear();
     std::vector<Item*> inventory_options;
     for(int i = 0; i < item_container.size(); i++) {
         Item* item = item_container[i];
-        if(item->TYPE == TYPE && item->TIER <= TIER) {
+        if(item->TYPE == TYPE && item->TIER <= Player::get().get_stat("Level")) {
             inventory_options.push_back(item);
         }
     }
@@ -116,4 +114,4 @@ void Vendor::generate_inventory() {
             i -= 1;
         }
     }
-}
+};

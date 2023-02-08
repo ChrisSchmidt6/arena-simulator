@@ -5,11 +5,9 @@
 #include "Item.h"
 
 struct Vendor {
-    const std::string NAME;
-    const unsigned int TIER;
     const VenType TYPE;
 
-    Vendor(std::string name, unsigned int tier, VenType type);
+    Vendor(VenType type);
     
     static void main_menu(Vendor& apothecary, Vendor& blacksmith, Vendor& chef);
 
