@@ -19,10 +19,12 @@ struct Combat {
     void take_damage(int damage);
 
     void toggle_defending();
+    void clear_def_cooldown();
     bool is_defending();
-    void toggle_focused();
+    bool can_defend();
+    void toggle_accurate();
     void toggle_weakened();
-    bool is_focused();
+    bool is_accurate();
     bool is_weakened();
     void clear_cooldowns();
 protected:
@@ -38,7 +40,8 @@ protected:
     int gold = 10;
     Item* weapon_slot = get_item(200);
 private:
+    bool defend_cooldown = false;
     bool defending = false;
     bool weakened = false;
-    bool focused = false;
+    bool accurate = false;
 };

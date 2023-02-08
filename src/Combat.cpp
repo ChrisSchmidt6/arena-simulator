@@ -16,7 +16,7 @@ bool Combat::accuracy_roll(int opponent_defense) {
     std::mt19937 mt(rd());
 
     int temp_accuracy = accuracy;
-    if(is_focused()) temp_accuracy += accuracy;
+    if(is_accurate()) temp_accuracy += accuracy;
 
     int hit_scale = opponent_defense - temp_accuracy;
     // hit_chance min is -12 and max is 12 (30% loss vs 30% gain)
@@ -51,22 +51,31 @@ void Combat::take_damage(int damage) {
 
 void Combat::toggle_defending() {
     defending = !defending;
+    if(defending) defend_cooldown = true;
+};
+
+void Combat::clear_def_cooldown() {
+    defend_cooldown = false;
 };
 
 bool Combat::is_defending() {
     return defending;
 };
 
-void Combat::toggle_focused() {
-    focused = !focused;
+bool Combat::can_defend() {
+    return !defend_cooldown;
+};
+
+void Combat::toggle_accurate() {
+    accurate = !accurate;
 };
 
 void Combat::toggle_weakened() {
     weakened = !weakened;
 };
 
-bool Combat::is_focused() {
-    return focused;
+bool Combat::is_accurate() {
+    return accurate;
 };
 
 bool Combat::is_weakened() {
@@ -74,7 +83,8 @@ bool Combat::is_weakened() {
 };
 
 void Combat::clear_cooldowns() {
+    defend_cooldown = false;
     defending = false;
-    focused = false;
+    accurate = false;
     weakened = false;
 };

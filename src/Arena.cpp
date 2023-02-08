@@ -35,59 +35,55 @@ void Arena::fight_menu() {
 
     pairVec menu_items;
 
+    // 1 = attack, 2 = accurate attack, 3 = defend
     int enemy_move;
 
     do {
         std::cout << "[Fight Menu]\n";
 
         if(continue_round) {
-            // 1 = attack, 2 = focused attack, 3 = defend
-            std::vector<int> enemy_move_pool { 1, 2, 3 };
-            if(enemy.is_focused()) enemy_move_pool.erase(enemy_move_pool.begin() + 1);
-            if(enemy.is_defending()) enemy_move_pool.erase(enemy_move_pool.begin() + 2);
-
-            std::uniform_int_distribution<int> move_dist(0, enemy_move_pool.size() - 1);
-            // Enemy picks enemy_move
-            enemy_move = enemy_move_pool[move_dist(mt)];
-            
+            // Check and update cooldowns
             pre_round_checks(enemy);
+            pre_round_checks(player);
+            
+            // Set whether defending is an option
+            int possible_moves = enemy.can_defend() ? 3 : 2;
+            std::uniform_int_distribution<int> move_dist(1, possible_moves);
+            // Enemy picks enemy_move
+            enemy_move = move_dist(mt);
 
             // Set enemy to defending if that was chosen
-            if(enemy_move == 2) enemy.toggle_focused();
+            if(enemy_move == 2) enemy.toggle_accurate();
             if(enemy_move == 3) enemy.toggle_defending();
         }
 
         menu_items.clear();
+        continue_round = true;
 
         // Insert blank so that fight options start at 1 instead of 0
         menu_items.push_back(std::make_pair("Blank", []() -> void {}));
 
-        menu_items.push_back(std::make_pair("Attack", [this]() -> void {
-            pre_round_checks(player);
-            // Regular attack
+        std::string attack_option = player.is_weakened() ? "Attack [weakened]" : "Attack";
+        menu_items.push_back(std::make_pair(attack_option, [this]() -> void {
             process_attack(player, enemy);
             if(!enemy.is_alive()) return;
             // Process enemy attack if not defending
             if(!enemy.is_defending()) process_attack(enemy, player);
-            continue_round = true;
         }));
 
-        if(!player.is_focused()) {
-            menu_items.push_back(std::make_pair("Focused Attack", [this]() -> void {
-                pre_round_checks(player);
-                // Double accuracy this turn, half damage next turn
-                player.toggle_focused();
-                process_attack(player, enemy);
-                if(!enemy.is_alive()) return;
-                // Process enemy attack if not defending
-                if(!enemy.is_defending()) process_attack(enemy, player);
-                continue_round = true;
-            }));
-        }
+        std::string accurate_option =
+            player.is_weakened() ? "Accurate Attack [weakened]" : "Accurate Attack";
+        menu_items.push_back(std::make_pair(accurate_option, [this]() -> void {
+            // Double accuracy this turn, half damage next turn
+            player.toggle_accurate();
+            process_attack(player, enemy);
+            if(!enemy.is_alive()) return;
+            // Process enemy attack if not defending
+            if(!enemy.is_defending()) process_attack(enemy, player);
+        }));
 
-        if(!player.is_defending()) {
+        if(player.can_defend()) {
             menu_items.push_back(std::make_pair("Defend", [this]() -> void {
-                pre_round_checks(player);
                 // Double defense for a turn
                 player.toggle_defending();
                 // Process enemy attack if not defending
@@ -98,7 +94,6 @@ void Arena::fight_menu() {
                     << "(You both tried to defend)\n";
                     pause_until_enter();
                 }
-                continue_round = true;
             }));
         }
 
@@ -139,11 +134,13 @@ void Arena::train_menu() {
 };
 
 void Arena::pre_round_checks(Combat &fighter) {
-    if(fighter.is_defending()) fighter.toggle_defending();
+    if(fighter.is_defending() && !fighter.can_defend()) fighter.toggle_defending();
+    else if(!fighter.can_defend()) fighter.clear_def_cooldown();
 
-    if(fighter.is_weakened() && fighter.is_focused()) {
-        fighter.toggle_focused();
-    } else if (fighter.is_weakened()) {
+    if(fighter.is_accurate()) {
+        fighter.toggle_accurate();
+        if(!fighter.is_weakened()) fighter.toggle_weakened();
+    } else if(fighter.is_weakened()) {
         fighter.toggle_weakened();
     }
 };
@@ -158,27 +155,25 @@ void Arena::process_attack(Combat &attacker, Combat &defender) {
 
     bool landed_hit = attacker.accuracy_roll(e_defense);
 
+    // Include indicators of boosts and nerfs
+    std::string possibleWeakened = attacker.is_weakened() ? "weakened " : "";
+    std::string possibleAccurate = attacker.is_accurate() ? "more accurate " : "";
+
     if(landed_hit) {
         int damage = attacker.damage_roll();
         if(damage > e_health) damage = e_health;
         defender.take_damage(damage);
         
-        // Display "focused" if attack was focused
-        std::string optional = attacker.is_focused() ? "focused " : "";
-        std::cout << attacker.get_name() << " landed a " << optional << "hit! "
-            << defender.get_name() << " has taken " << damage << " damage.\n";
+        std::cout << attacker.get_name() << " landed a " << possibleWeakened << possibleAccurate
+            << "hit! " << defender.get_name() << " has taken " << damage << " damage.\n";
     } else {
-        // Display "focused" or "tried" depending on attack type
-        std::string verb = attacker.is_focused() ? " focused" : " tried";
-        std::cout << attacker.get_name()
-            << verb << " as hard as they could, but alas, they missed their attack.\n";
+        std::cout << defender.get_name() << " managed to avoid " << attacker.get_name() << "'s "
+            << possibleWeakened << possibleAccurate << "strike!\n";
     }
 
-    // Set weakened to true, if this was a focused hit
-    if(attacker.is_focused()) attacker.toggle_weakened();
-    if(!defender.is_alive()) {
-        std::cout << defender.get_name() << " has been defeated by " << attacker.get_name() << "!\n\n";
-    }
+    // Check if defender has died
+    if(!defender.is_alive())
+        std::cout << attacker.get_name() << " has defeated " << defender.get_name() << "!\n\n";
     else pause_until_enter();
 };
 
