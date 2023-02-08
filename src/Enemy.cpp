@@ -106,8 +106,8 @@ Enemy Enemy::generate_enemy(const int tier) {
         // If stat to be changed is weapon tier, and amount is greater than max weapon tier,
         // instead change weapon tier to max amount and deduct that from points
         if(stat_to_increase == &weapon_tier && increase_amount > max_weapon_tier) {
-            *stat_to_increase += max_weapon_tier;
-            available_stat_points -= max_weapon_tier;
+            available_stat_points -= (max_weapon_tier - *stat_to_increase);
+            *stat_to_increase = max_weapon_tier;
         } else {
             // Otherwise carry on as normal
             *stat_to_increase += increase_amount;
