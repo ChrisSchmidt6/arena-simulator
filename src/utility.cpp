@@ -35,6 +35,11 @@ bool print_menu(pairVec menu_items, bool print_plain) {
         std::cout << "Please enter a valid integer.\n\n";
     }
 
+    if(menu_items[choice].first == "Blank") {
+        std::cout << "Please enter a valid option.\n\n";
+        return true;
+    }
+
     if(print_plain) {
         if(choice >= 0 && choice < menu_items.size()) {
             // Call function associated with menu choice

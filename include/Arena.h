@@ -10,7 +10,7 @@ private:
     // Some choices in fight/train menu should not cause a new move to be rolled
     // This will also prevent pre_round_checks from running unnecessarily
     // for the enemy
-    bool continue_round = true;
+    bool continue_round = false;
     Player &player = Player::get();
     Enemy enemy = Enemy::generate_enemy(Player::get().get_stat("Level"));
 

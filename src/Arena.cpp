@@ -58,7 +58,7 @@ void Arena::fight_menu() {
         }
 
         menu_items.clear();
-        continue_round = true;
+        continue_round = false;
 
         // Insert blank so that fight options start at 1 instead of 0
         menu_items.push_back(std::make_pair("Blank", []() -> void {}));
@@ -69,6 +69,7 @@ void Arena::fight_menu() {
             if(!enemy.is_alive()) return;
             // Process enemy attack if not defending
             if(!enemy.is_defending()) process_attack(enemy, player);
+            continue_round = true;
         }));
 
         std::string accurate_option =
@@ -78,8 +79,10 @@ void Arena::fight_menu() {
             player.toggle_accurate();
             process_attack(player, enemy);
             if(!enemy.is_alive()) return;
+
             // Process enemy attack if not defending
             if(!enemy.is_defending()) process_attack(enemy, player);
+            continue_round = true;
         }));
 
         if(player.can_defend()) {
@@ -90,15 +93,15 @@ void Arena::fight_menu() {
                 if(!enemy.is_defending()) process_attack(enemy, player);
                 else {
                     std::cout << "Both fighters stare at each other blankly, "
-                    << "wondering whether they would be friends in another reality..\n"
-                    << "(You both tried to defend)\n";
+                        << "wondering whether they would be friends in another reality..\n"
+                        << "(You both tried to defend)\n";
                     pause_until_enter();
                 }
+                continue_round = true;
             }));
         }
 
         menu_items.push_back(std::make_pair("Check Consumables", [this]() -> void {
-            continue_round = false;
             std::cout << "Feature in progress\n";
             pause_until_enter();
             // If player doesn't use consumable, don't do any of the following
@@ -109,7 +112,6 @@ void Arena::fight_menu() {
 
         menu_items.push_back(std::make_pair("Check Statistics", [this]() -> void {
             print_stats();
-            continue_round = false;
         }));
 
     } while(print_menu(menu_items, true) && player.is_alive() && enemy.is_alive());
