@@ -18,7 +18,7 @@ bool Combat::accuracy_roll(int opponent_defense) {
     int temp_accuracy = accuracy;
     if(is_accurate()) temp_accuracy += accuracy;
 
-    int hit_scale = opponent_defense - temp_accuracy;
+    int hit_scale = temp_accuracy - opponent_defense;
     // hit_chance min is -12 and max is 12 (30% loss vs 30% gain)
     if(hit_scale < -15) hit_scale = -15;
     if(hit_scale > 15) hit_scale = 15;
