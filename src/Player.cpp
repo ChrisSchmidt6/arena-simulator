@@ -108,8 +108,7 @@ int Player::get_stat(std::string stat) {
 void Player::display_stats() {
     // Width of stat titles
     int tw = 14;
-    printf("%-*s%-s\n", tw, "Max Health:", std::to_string(max_health).c_str());
-    printf("%-*s%-s\n", tw, "Health:", std::to_string(health).c_str());
+    printf("%-*s%-s\n", tw, "Health:", (std::to_string(health) + " / " + std::to_string(max_health)).c_str());
     printf("%-*s%-s\n", tw, "Attack:", std::to_string(attack).c_str());
     printf("%-*s%-s\n", tw, "Accuracy:", std::to_string(accuracy).c_str());
     printf("%-*s%-s\n", tw, "Defense:", std::to_string(defense).c_str());
