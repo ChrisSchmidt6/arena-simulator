@@ -229,9 +229,7 @@ void Arena::enemy_death(bool training) {
         std::cout << "You are rewarded with " << enemy.gold_reward() << " gold pieces.\n";
     }
     player.gain_experience(enemy.experience_reward());
-    std::cout << "You gain " << enemy.experience_reward() << " experience.\n";
     save_to_file();
-    pause_until_enter();
 
     // Check if enemy drops weapon
     if(!training && enemy.weapon_reward()) {

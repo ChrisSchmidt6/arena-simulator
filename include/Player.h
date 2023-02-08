@@ -12,7 +12,6 @@ struct Player : Combat {
     }
 
     std::string name;
-
     std::string get_name() override;
     int get_stat(std::string stat) override;
     void display_stats() override;
@@ -35,8 +34,13 @@ struct Player : Combat {
     bool load_save_data(std::string &save_data);
 private:
     Player() {}
-    
+
     int experience = 0;
-    const int lose_weapon_chance = 10;
+    int experience_target = 50;
+    int total_experience = 0;
+    const double EXPERIENCE_SCALING = 1.15;
+    const int LOSE_WEAPON_CHANCE = 10;
     std::vector<Item*> inventory;
+
+    void level_up();
 };

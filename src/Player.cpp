@@ -56,7 +56,7 @@ void Player::remove_weapon() {
 };
 
 int Player::weapon_drop_chance() {
-    return lose_weapon_chance;
+    return LOSE_WEAPON_CHANCE;
 };
 
 void Player::increase_gold(int amount) {
@@ -68,7 +68,14 @@ void Player::decrease_gold(int amount) {
 };
 
 void Player::gain_experience(int amount) {
+    std::cout << "You gain " << amount << " experience.\n";
     experience += amount;
+    total_experience += amount;
+    pause_until_enter();
+    if(experience > experience_target) {
+        experience -= experience_target;
+        level_up();
+    }
 };
 
 std::string Player::get_name() {
@@ -104,7 +111,8 @@ void Player::display_stats() {
     std::cout << "Accuracy: " << accuracy << "\n";
     std::cout << "Defense: " << defense << "\n";
     std::cout << "Level: " << level << "\n";
-    std::cout << "Experience: " << experience << "\n";
+    std::cout << "Experience: " << experience << "/" << experience_target << "\n";
+    std::cout << "Total Exp.: " << total_experience << "\n";
 };
 
 void Player::inventory_menu() {
@@ -167,6 +175,59 @@ void Player::weapon_menu() {
 
 void Player::reset_health() {
     health = max_health;
+};
+
+void Player::level_up() {
+    level++;
+    std::cout << "Congratulations, you have leveled up!\n";
+    // Free health increase every 2nd level
+    bool health_increase = level % 2;
+    if(health_increase) {
+        std::cout << "Your max health has increased to " << ++max_health << "!\n";
+        if(health < max_health) health++;
+    }
+    experience_target *= EXPERIENCE_SCALING;
+    save_to_file();
+    pause_until_enter();
+
+    pairVec menu_items;
+    int stat_points = 2;
+
+    do {
+        std::cout << "You have " << stat_points << " point(s) to increase stats. Pick a stat to increase by 1.\n\n";
+        std::cout << "[Level Up Menu]\n";
+        menu_items.clear();
+
+        menu_items.push_back(std::make_pair("Blank", []() -> void {}));
+
+        menu_items.push_back(std::make_pair("Health", [this, &stat_points]() -> void {
+            stat_points--;
+            std::cout << "Your max health has increased to " << ++max_health << "!\n";
+            save_to_file();
+            pause_until_enter();
+        }));
+
+        menu_items.push_back(std::make_pair("Attack", [this, &stat_points]() -> void {
+            stat_points--;
+            std::cout << "Your attack has increased to " << ++attack << "!\n";
+            save_to_file();
+            pause_until_enter();
+        }));
+
+        menu_items.push_back(std::make_pair("Accuracy", [this, &stat_points]() -> void {
+            stat_points--;
+            std::cout << "Your accuracy has increased to " << ++accuracy << "!\n";
+            save_to_file();
+            pause_until_enter();
+        }));
+
+        menu_items.push_back(std::make_pair("Defense", [this, &stat_points]() -> void {
+            stat_points--;
+            std::cout << "Your defense has increased to " << ++defense << "!\n";
+            save_to_file();
+            pause_until_enter();
+        }));
+    } while(print_menu(menu_items, true) && stat_points > 0);
 };
 
 std::string Player::get_save_data() {
@@ -253,6 +314,14 @@ bool Player::load_save_data(std::string &save_data) {
             pos = save_data.find(',', pos + len) + 2;
             pos += (save_data[pos] == '\n') ? 1 : 0;
         }
+
+        // Calibrate experience variables
+        int i = 0;
+        while(i++ < level) {
+            total_experience += experience_target;
+            experience_target *= EXPERIENCE_SCALING;
+        }
+        total_experience += experience;
     } catch(const std::exception & ex) {
         std::cout << ex.what() << "\n";
         return false;
