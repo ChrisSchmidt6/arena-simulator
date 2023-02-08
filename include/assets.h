@@ -63,9 +63,9 @@ inline std::vector<Item*> item_container {
     new Weapon(235, "Archaic Bow", VenType::Blacksmith, 75, 7, Rarity::Rare, true, 21),
     new Weapon(236, "Book of Secrets", VenType::Blacksmith, 85, 7, Rarity::Mythic, true, 22),
     new Weapon(237, "Sacred Wand", VenType::Blacksmith, 80, 8, Rarity::Mythic, true, 22),
-    new Weapon(238, "Book of Secrets", VenType::Blacksmith, 92, 8, Rarity::Mythic, true, 23),
-    new Weapon(239, "Book of Secrets", VenType::Blacksmith, 92, 8, Rarity::Mythic, true, 23),
-    new Weapon(240, "Book of Secrets", VenType::Blacksmith, 92, 8, Rarity::Mythic, true, 23),
+    new Weapon(238, "Staff of Nature", VenType::Blacksmith, 92, 8, Rarity::Mythic, true, 23),
+    new Weapon(239, "Staff of Life", VenType::Blacksmith, 92, 8, Rarity::Mythic, true, 23),
+    new Weapon(240, "Staff of Energy", VenType::Blacksmith, 92, 8, Rarity::Mythic, true, 23),
     new Weapon(241, "Chaotic Tome", VenType::Blacksmith, 100, 8, Rarity::Mythic, true, 24),
 };
 
