@@ -233,20 +233,21 @@ void Arena::enemy_death(bool training) {
 
     // Check if enemy drops weapon
     if(!training && enemy.weapon_reward()) {
-        std::cout << enemy.get_name() << " is so impressed they are offering you to take their "
-            << enemy.get_weapon()->ITEM_NAME << " as a token of respect!\n";
+        std::string weapon_name = enemy.get_weapon()->ITEM_NAME;
+        std::cout << enemy.get_name() << " is impressed and wants to offer up their "
+            << weapon_name << " as a token of respect!\n";
         
         menu_items.clear();
 
         menu_items.push_back(std::make_pair("Blank", []() -> void {}));
-        menu_items.push_back(std::make_pair("Yes", [this]() -> void {
+        menu_items.push_back(std::make_pair("Take " + weapon_name, [this]() -> void {
             player.insert_item(enemy.get_weapon());
             std::cout << "You thank them and humbly accept their "
                 << enemy.get_weapon()->ITEM_NAME << ".\n";
             save_to_file();
             pause_until_enter();
         }));
-        menu_items.push_back(std::make_pair("No", []() -> void {
+        menu_items.push_back(std::make_pair("Humbly decline", []() -> void {
             std::cout << "Although you appreciate the gesture, you decline their offer"
                 << " and let them know you hope to cross paths again.\n";
             pause_until_enter();
