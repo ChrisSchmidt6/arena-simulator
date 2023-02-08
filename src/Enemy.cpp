@@ -1,5 +1,6 @@
 #include <random>
 #include <vector>
+#include <cmath>
 
 #include "Enemy.h"
 #include "assets.h"
@@ -13,6 +14,7 @@ Enemy::Enemy(std::string name, int max_health, int attack, int accuracy,
     this->name = name;
     this->max_health = max_health;
     this->health = max_health;
+    this->attack = attack;
     this->accuracy = accuracy;
     this->defense = defense;
     this->level = level;
@@ -82,13 +84,16 @@ Enemy Enemy::generate_enemy(const int tier) {
     // Base pool of 3 stat increases
     // Add another stat increase every 2nd tier increase
     int available_stat_points = 3;
-    available_stat_points += tier / 2;
+    available_stat_points += floor(tier / 5);
 
-    int max_health = 10;
-    int attack = 1;
-    int accuracy = 1;
-    int defense = 1;
-    int weapon_tier = 1;
+    // Every 4th tier, increase base stats by 1
+    const int BASE_INCREASE = floor(tier / 3);
+    int base_health = 10 + floor(tier / 2);
+    int max_health = base_health + BASE_INCREASE;
+    int attack = 1 + BASE_INCREASE;
+    int accuracy = 1 + BASE_INCREASE;
+    int defense = 1 + BASE_INCREASE;
+    int weapon_tier = 1 + BASE_INCREASE;
     int max_weapon_tier = tier + 1;
 
     std::vector<int*> stats = { &max_health, &attack, &accuracy, &defense, &weapon_tier };
