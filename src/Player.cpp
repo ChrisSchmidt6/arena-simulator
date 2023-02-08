@@ -106,14 +106,16 @@ int Player::get_stat(std::string stat) {
 };
 
 void Player::display_stats() {
-    std::cout << "Max Health: " << max_health << "\n";
-    std::cout << "Health: " << health << "\n";
-    std::cout << "Attack: " << attack << "\n";
-    std::cout << "Accuracy: " << accuracy << "\n";
-    std::cout << "Defense: " << defense << "\n";
-    std::cout << "Level: " << level << "\n";
-    std::cout << "Experience: " << experience << "/" << experience_target << "\n";
-    std::cout << "Total Exp.: " << total_experience << "\n";
+    // Width of stat titles
+    int tw = 14;
+    printf("%-*s%-s\n", tw, "Max Health:", std::to_string(max_health).c_str());
+    printf("%-*s%-s\n", tw, "Health:", std::to_string(health).c_str());
+    printf("%-*s%-s\n", tw, "Attack:", std::to_string(attack).c_str());
+    printf("%-*s%-s\n", tw, "Accuracy:", std::to_string(accuracy).c_str());
+    printf("%-*s%-s\n", tw, "Defense:", std::to_string(defense).c_str());
+    printf("%-*s%-s\n", tw, "Level:", std::to_string(level).c_str());
+    printf("%-*s%-s\n", tw, "Experience:", (std::to_string(experience) + " / " + std::to_string(experience_target)).c_str());
+    printf("%-*s%-s\n", tw, "Total Exp.:", std::to_string(total_experience).c_str());
 };
 
 void Player::inventory_menu() {

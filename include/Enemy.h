@@ -13,7 +13,6 @@ struct Enemy : Combat {
 
     std::string get_name() override;
     int get_stat(std::string stat) override;
-    void display_stats() override;
 
     static Enemy generate_enemy(const int tier);
     int gold_reward();

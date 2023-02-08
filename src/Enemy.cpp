@@ -59,18 +59,6 @@ bool Enemy::weapon_reward() {
 
 int Enemy::experience_reward() {
     return experience_rewarded;
-}
-
-void Enemy::display_stats() {
-    std::cout << "[" << name << "]\n";
-    std::cout << "Health: " << health << "/" << max_health << "\n";
-    std::cout << "Attack: " << attack << "\n";
-    std::cout << "Accuracy: " << accuracy << "\n";
-    std::cout << "Defense: " << defense << "\n";
-    std::cout << "Level: " << level << "\n";
-    std::cout << "Experience rewarded: " << experience_rewarded << "\n";
-    std::cout << "Gold: " << gold << "\n";
-    std::cout << "Chance to drop weapon: " << drop_weapon_chance << "\n";
 };
 
 Enemy Enemy::generate_enemy(const int tier) {

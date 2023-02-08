@@ -15,8 +15,8 @@ struct Player : Combat {
     std::string name;
     std::string get_name() override;
     int get_stat(std::string stat) override;
-    void display_stats() override;
 
+    void display_stats();
     void insert_item(Item* item);
     bool remove_item(Item* item);
     bool buy_item(Item* item);

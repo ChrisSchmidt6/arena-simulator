@@ -9,7 +9,6 @@
 struct Combat {
     virtual std::string get_name() = 0;
     virtual int get_stat(std::string stat) = 0;
-    virtual void display_stats() = 0;
     
     Weapon* get_weapon();
     int get_boost(std::string stat);
