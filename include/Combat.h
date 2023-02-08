@@ -37,7 +37,7 @@ protected:
     int accuracy = 1;
     int defense = 1;
     int level = 1;
-    int gold = 10;
+    int gold = 20;
     Item* weapon_slot = get_item(200);
 private:
     bool defend_cooldown = false;
