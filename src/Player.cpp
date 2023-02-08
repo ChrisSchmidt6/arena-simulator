@@ -176,7 +176,6 @@ void Player::weapon_menu() {
     } while(print_menu(menu_items));
 };
 
-
 std::vector<Consumable*> Player::get_potions() {
     std::vector<Consumable*> consumables;
     for(int i = 0; i < inventory.size(); i++) {
@@ -196,6 +195,27 @@ void Player::drink_potion(Consumable* potion) {
 
     int new_health = health + potion->HEALTH_REGEN;
     health = new_health > max_health ? max_health : new_health;
+    save_to_file();
+    pause_until_enter();
+};
+
+std::vector<Consumable*> Player::get_food() {
+    std::vector<Consumable*> food;
+    for(int i = 0; i < inventory.size(); i++) {
+        if(inventory[i]->TYPE == VenType::Chef) {
+            food.push_back(static_cast<Consumable*>(inventory[i]));
+        }
+    }
+    return food;
+};
+
+void Player::eat_food(Consumable* food) {
+    std::cout << "You devour your " << food->ITEM_NAME << " and feel satiated.\n";
+    int old_health = health;
+    int new_health = health + food->HEALTH_REGEN;
+    health = new_health > max_health ? max_health : new_health;
+    std::cout << "You have restored " << (health - old_health) << " health.\n";
+    remove_item(food);
     save_to_file();
     pause_until_enter();
 };

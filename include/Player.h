@@ -25,6 +25,8 @@ struct Player : Combat {
     void remove_weapon();
     std::vector<Consumable*> get_potions();
     void drink_potion(Consumable* potion);
+    std::vector<Consumable*> get_food();
+    void eat_food(Consumable* food);
     int weapon_drop_chance();
     void increase_gold(int amount);
     void decrease_gold(int amount);
