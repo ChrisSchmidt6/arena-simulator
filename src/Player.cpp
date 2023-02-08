@@ -156,7 +156,8 @@ void Player::weapon_menu() {
                 } else {
                     inventory.push_back(weapon_slot);
                     weapon_slot = get_item(200);
-                    std::cout << "You are no longer wielding your " << weapon->ITEM_NAME << ".\n\n";
+                    std::cout << "You are no longer wielding your " << weapon->ITEM_NAME << ".\n";
+                    pause_until_enter();
                     return;
                 }
             }));
