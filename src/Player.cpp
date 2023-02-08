@@ -174,6 +174,30 @@ void Player::weapon_menu() {
     } while(print_menu(menu_items));
 };
 
+
+std::vector<Consumable*> Player::get_potions() {
+    std::vector<Consumable*> consumables;
+    for(int i = 0; i < inventory.size(); i++) {
+        if(inventory[i]->TYPE == VenType::Apothecary) {
+            consumables.push_back(static_cast<Consumable*>(inventory[i]));
+        }
+    }
+    return consumables;
+};
+
+void Player::drink_potion(Consumable* potion) {
+    std::cout << "You gulp down your " << potion->ITEM_NAME << " quickly and feel invigorated.\n";
+    att_boost += potion->ATTACK_MOD;
+    acc_boost += potion->ACCURACY_MOD;
+    def_boost += potion->DEFENSE_MOD;
+    remove_item(potion);
+
+    int new_health = health + potion->HEALTH_REGEN;
+    health = new_health > max_health ? max_health : new_health;
+    save_to_file();
+    pause_until_enter();
+};
+
 void Player::reset_health() {
     health = max_health;
 };

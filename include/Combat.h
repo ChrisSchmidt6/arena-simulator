@@ -12,6 +12,7 @@ struct Combat {
     virtual void display_stats() = 0;
     
     Weapon* get_weapon();
+    int get_boost(std::string stat);
     bool is_alive();
 
     bool accuracy_roll(int opponent_defense);
@@ -26,7 +27,7 @@ struct Combat {
     void toggle_weakened();
     bool is_accurate();
     bool is_weakened();
-    void clear_cooldowns();
+    void reset_temps();
 protected:
     Combat() {};
     virtual ~Combat() {};
@@ -39,6 +40,10 @@ protected:
     int level = 1;
     int gold = 20;
     Item* weapon_slot = get_item(200);
+
+    int att_boost = 0;
+    int acc_boost = 0;
+    int def_boost = 0;
 private:
     bool defend_cooldown = false;
     bool defending = false;

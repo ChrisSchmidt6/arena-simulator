@@ -2,6 +2,7 @@
 
 #include "Combat.h"
 #include "Item.h"
+#include "Consumable.h"
 #include "assets.h"
 
 struct Player : Combat {
@@ -22,6 +23,8 @@ struct Player : Combat {
     int has_item(Item* item); // returns position of item in inventory, -1 if not found
     void equip_weapon(Item* weapon);
     void remove_weapon();
+    std::vector<Consumable*> get_potions();
+    void drink_potion(Consumable* potion);
     int weapon_drop_chance();
     void increase_gold(int amount);
     void decrease_gold(int amount);

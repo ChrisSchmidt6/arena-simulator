@@ -7,6 +7,16 @@ Weapon* Combat::get_weapon() {
     return static_cast<Weapon*>(weapon_slot);
 };
 
+int Combat::get_boost(std::string stat) {
+    if(stat == "Attack") {
+        return att_boost;
+    } else if(stat == "Accuracy") {
+        return acc_boost;
+    } else if(stat == "Defense") {
+        return def_boost;
+    } else return 0;
+};
+
 bool Combat::is_alive() {
     return health > 0;
 };
@@ -17,6 +27,7 @@ bool Combat::accuracy_roll(int opponent_defense) {
 
     int temp_accuracy = accuracy;
     if(is_accurate()) temp_accuracy += accuracy;
+    temp_accuracy += acc_boost;
 
     int hit_scale = temp_accuracy - opponent_defense;
     // hit_chance min is -12 and max is 12 (30% loss vs 30% gain)
@@ -32,7 +43,7 @@ bool Combat::accuracy_roll(int opponent_defense) {
 int Combat::damage_roll() {
     // (Attack stat + weapon modifier) / 2
     // Will likely be tweaked in the future
-    int max_damage = (attack + get_weapon()->ATTACK_MOD) / 2;
+    int max_damage = (attack + att_boost + get_weapon()->ATTACK_MOD) / 2;
 
     if(is_weakened()) max_damage /= 2;
     // Minimum damage of 1
@@ -82,7 +93,10 @@ bool Combat::is_weakened() {
     return weakened;
 };
 
-void Combat::clear_cooldowns() {
+void Combat::reset_temps() {
+    att_boost = 0;
+    acc_boost = 0;
+    def_boost = 0;
     defend_cooldown = false;
     defending = false;
     accurate = false;

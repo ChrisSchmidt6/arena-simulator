@@ -1,7 +1,9 @@
 #include <iostream>
+#include <iomanip>
 #include <random>
 
 #include "Arena.h"
+#include "Consumable.h"
 #include "utility.h"
 
 void Arena::main_menu() {
@@ -102,12 +104,7 @@ void Arena::fight_menu() {
         }
 
         menu_items.push_back(std::make_pair("Check Consumables", [this]() -> void {
-            std::cout << "Feature in progress\n";
-            pause_until_enter();
-            // If player doesn't use consumable, don't do any of the following
-            // pre_round_checks(player);
-            // if(!enemy.is_defending()) process_attack(enemy, player);
-            // continue_round = true;
+            consumables_menu();
         }));
 
         menu_items.push_back(std::make_pair("Check Statistics", [this]() -> void {
@@ -117,7 +114,7 @@ void Arena::fight_menu() {
     } while(print_menu(menu_items, true) && player.is_alive() && enemy.is_alive());
 
     // Reset cooldowns
-    player.clear_cooldowns();
+    player.reset_temps();
 
     // Check for deaths
     if(!enemy.is_alive()) enemy_death();
@@ -151,10 +148,10 @@ void Arena::process_attack(Combat &attacker, Combat &defender) {
     int e_health = defender.get_stat("Health");
     int e_defense = defender.get_stat("Defense");
     if(defender.is_defending()) {
+        e_defense += e_defense;
         std::cout << defender.get_name() << " has chosen to defend!\n";
-        e_defense *= 2;
     }
-
+    e_defense += defender.get_boost("Defense");
     bool landed_hit = attacker.accuracy_roll(e_defense);
 
     // Include indicators of boosts and nerfs
@@ -176,23 +173,67 @@ void Arena::process_attack(Combat &attacker, Combat &defender) {
     // Check if defender has died
     if(!defender.is_alive())
         std::cout << attacker.get_name() << " has defeated " << defender.get_name() << "!\n\n";
-    else pause_until_enter();
+    else {
+        save_to_file();
+        pause_until_enter();
+    }
 };
 
 void Arena::print_stats() {
-    std::cout << "Names:\t\t" << player.get_name() << "\t" << enemy.get_name() << " [Foe]\n";
-    std::cout << "Health:\t\t"
-        << player.get_stat("Health") << "/" << player.get_stat("Max Health")
-        << "\t" << enemy.get_stat("Health") << "/" << enemy.get_stat("Max Health") << "\n";
-    std::cout << "Attack:\t\t" << player.get_stat("Attack") << "\t" << enemy.get_stat("Attack") << "\n";
-    std::cout << "Acc.:\t\t" << player.get_stat("Accuracy") << "\t" << enemy.get_stat("Accuracy") << "\n";
-    std::cout << "Def.:\t\t" << player.get_stat("Defense") << "\t" << enemy.get_stat("Defense") << "\n";
-    std::cout << "Level:\t\t" << player.get_stat("Level") << "\t" << enemy.get_stat("Level") << "\n";
-    std::cout << player.get_name() << "'s weapon: "
-        << player.get_weapon()->ITEM_NAME << " [+" << player.get_weapon()->ATTACK_MOD << "]\n";
-    std::cout << "[Foe] " << enemy.get_name() << "'s weapon: "
-        << enemy.get_weapon()->ITEM_NAME << " [+" << enemy.get_weapon()->ATTACK_MOD << "]\n";
+    // Width of stat titles
+    int tw = 12;
+    // Width of fighter details
+    int fw = 28;
+    printf("%-*s%-*s%-*s\n", tw, "Names:", fw, player.get_name().c_str(), fw, (enemy.get_name() + " [Foe]").c_str());
+    printf("%-*s%-*s%-*s\n", tw, "Health:",
+        fw, (std::to_string(player.get_stat("Health")) + " / " + std::to_string(player.get_stat("Max Health"))).c_str(),
+        fw, (std::to_string(enemy.get_stat("Health")) + " / " + std::to_string(enemy.get_stat("Max Health"))).c_str());
+    printf("%-*s%-*s%-*s\n", tw, "Attack:",
+        fw, (std::to_string(player.get_stat("Attack")) + " [+" + std::to_string(player.get_boost("Attack")) + "]").c_str(),
+        fw, (std::to_string(enemy.get_stat("Attack")) + " [+" + std::to_string(enemy.get_boost("Attack")) + "]").c_str());
+    printf("%-*s%-*s%-*s\n", tw, "Accuracy:",
+        fw, (std::to_string(player.get_stat("Accuracy")) + " [+" + std::to_string(player.get_boost("Accuracy")) + "]").c_str(),
+        fw, (std::to_string(enemy.get_stat("Accuracy")) + " [+" + std::to_string(enemy.get_boost("Accuracy")) + "]").c_str());
+    printf("%-*s%-*s%-*s\n", tw, "Defense:",
+        fw, (std::to_string(player.get_stat("Defense")) + " [+" + std::to_string(player.get_boost("Defense")) + "]").c_str(),
+        fw, (std::to_string(enemy.get_stat("Defense")) + " [+" + std::to_string(enemy.get_boost("Defense")) + "]").c_str());
+    printf("%-*s%-*s%-*s\n", tw, "Level:",
+        fw, std::to_string(player.get_stat("Level")).c_str(),
+        fw, std::to_string(enemy.get_stat("Level")).c_str());
+    printf("%-*s%-*s%-*s\n", tw, "Weapon:",
+        fw, (player.get_weapon()->ITEM_NAME + " [+" + std::to_string(player.get_weapon()->ATTACK_MOD) + "]").c_str(),
+        fw, (enemy.get_weapon()->ITEM_NAME + " [+" + std::to_string(enemy.get_weapon()->ATTACK_MOD) + "]").c_str());
     pause_until_enter();
+};
+
+void Arena::consumables_menu() {
+    pairVec menu_items;
+
+    int potion_amount = player.get_potions().size();
+    if(potion_amount == 0) {
+        std::cout << "You do not have any potions in your inventory.\n";
+        pause_until_enter();
+        return;
+    }
+    bool go_back = false;
+
+    do {
+        menu_items.clear();
+
+        menu_items.push_back(std::make_pair("Go back", [&go_back]() -> void {
+            go_back = true;
+        }));
+
+        for(int i = 0; i < potion_amount; i++) {
+            Consumable* potion = player.get_potions()[i];
+            menu_items.push_back(std::make_pair("Drink " + potion->ITEM_NAME, [this, i, &go_back]() -> void {
+                player.drink_potion(player.get_potions()[i]);
+                if(!enemy.is_defending()) process_attack(enemy, player);
+                continue_round = true;
+                go_back = true;
+            }));
+        }
+    } while (print_menu(menu_items, true) && !go_back);
 };
 
 void Arena::player_death(bool training) {
