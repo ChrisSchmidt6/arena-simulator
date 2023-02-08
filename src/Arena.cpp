@@ -3,8 +3,6 @@
 
 #include "Arena.h"
 #include "utility.h"
-#include "Player.h"
-#include "Enemy.h"
 
 void Arena::main_menu() {
     pairVec menu_items;
