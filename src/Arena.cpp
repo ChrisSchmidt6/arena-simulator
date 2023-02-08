@@ -209,8 +209,8 @@ void Arena::player_death(bool training) {
         std::uniform_int_distribution<int> hundred_dist(1, 100);
         int loss_roll = hundred_dist(mt);
         if(loss_roll <= player.weapon_drop_chance()) {
-            std::cout << enemy.get_name() << " does not think you are worthy of your "
-                << player.get_weapon()->ITEM_NAME << ". You watch them take your weapon before blacking out.\n";
+            std::cout << enemy.get_name() << " shouts \"You are not worthy of your "
+                << player.get_weapon()->ITEM_NAME << "!\" and takes your weapon as you black out.\n";
             player.remove_weapon();
         }
     }
