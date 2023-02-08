@@ -12,7 +12,7 @@ private:
     // for the enemy
     bool continue_round = true;
     Player &player = Player::get();
-    Enemy enemy = Enemy::generate_enemy(Player::get().get_stat("Level"));;
+    Enemy enemy = Enemy::generate_enemy(Player::get().get_stat("Level"));
 
     void fight_menu();
     void train_menu();
