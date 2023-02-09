@@ -69,10 +69,13 @@ Enemy Enemy::generate_enemy(const int tier) {
     std::uniform_int_distribution<int> name_dist(0, enemy_names.size() - 1);
     std::string name = enemy_names[name_dist(mt)];
 
-    // Base pool of 3 stat increases
-    // Add another stat increase every 2nd tier increase
-    int available_stat_points = 3;
-    available_stat_points += floor(tier / 5);
+    // Base pool of 3 stat increases unless training
+    // Add another stat increase every 2nd tier increase if not training
+    int available_stat_points = 0;
+    if(tier >= Player::get().get_stat("Level")) {
+        available_stat_points =  3;
+        available_stat_points += floor(tier / 5);
+    }
 
     // Every 4th tier, increase base stats by 1
     const int BASE_INCREASE = floor(tier / 3);
@@ -86,7 +89,7 @@ Enemy Enemy::generate_enemy(const int tier) {
 
     std::vector<int*> stats = { &max_health, &attack, &accuracy, &defense, &weapon_tier };
 
-    do {
+    while(available_stat_points > 0 && stats.size() > 0) {
         // Pick a random stat from the list of stat references
         std::uniform_int_distribution<int> stat_dist(0, stats.size() - 1);
         int random_stat_location = stat_dist(mt);
@@ -109,7 +112,7 @@ Enemy Enemy::generate_enemy(const int tier) {
 
         // Remove stat from list of stats
         stats.erase(stats.begin() + random_stat_location);
-    } while(stats.size() > 0 && available_stat_points > 0);
+    }
 
     // Create vector of weapons based on weapon tier
     std::vector<Item*> weapon_options;
