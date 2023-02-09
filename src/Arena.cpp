@@ -7,6 +7,7 @@
 #include "utility.h"
 
 void Arena::main_menu() {
+    const int tier = player.get_stat("Level");
     pairVec menu_items;
 
     do {
@@ -15,21 +16,48 @@ void Arena::main_menu() {
 
         menu_items.clear();
 
-        menu_items.push_back(std::make_pair("Fight", [this]() -> void {
+        menu_items.push_back(std::make_pair("Fight", [this, tier]() -> void {
+            // Generate new enemy if previously generated enemy is lower level
+            if(enemy.get_stat("Level") != tier) enemy = Enemy::generate_enemy(tier);
             fight_menu();
         }));
 
-        menu_items.push_back(std::make_pair("Train", [this]() -> void {
-            train_menu();
+        menu_items.push_back(std::make_pair("Train", [this, tier]() -> void {
+            int amount = tier * 5;
+            if(player.get_stat("Gold") < amount) {
+                std::cout << "You don't have " << amount << " gold pieces to spend.\n";
+                pause_until_enter();
+                return;
+            }
+
+            pairVec confirm_items;
+            bool early_return = false;
+
+            do {
+                std::cout << "There is a " << amount << " gold entry fee. Will you pay it?\n";
+                std::cout << "[Confirmation Menu]\n";
+                
+                confirm_items.push_back(std::make_pair("Yes", [this, tier, amount, &early_return]() -> void {
+                    if(enemy.get_stat("Level") != tier - 1) enemy = Enemy::generate_enemy(tier - 1);
+                    player.decrease_gold(amount);
+                    std::cout << "You have paid " << amount << " gold pieces to train.\n";
+                    pause_until_enter();
+                    train_menu();
+                    early_return = true;
+                }));
+
+                confirm_items.push_back(std::make_pair("No", [&early_return]() -> void {
+                    early_return = true;
+                }));
+            } while(print_menu(confirm_items) && !early_return);
+            
         }));
 
     } while(print_menu(menu_items));
 };
 
-void Arena::fight_menu() {
+void Arena::fight_menu(bool safe_death) {
     const int tier = player.get_stat("Level");
-    // Generate new enemy if previously generated enemy is lower level
-    if(enemy.get_stat("Level") < tier) enemy = Enemy::generate_enemy(tier);
     std::random_device rd;
     std::mt19937 mt(rd());
 
@@ -87,8 +115,7 @@ void Arena::fight_menu() {
             continue_round = true;
         }));
 
-        if(player.can_defend()) {
-            menu_items.push_back(std::make_pair("Defend", [this]() -> void {
+        if(player.can_defend()) menu_items.push_back(std::make_pair("Defend", [this]() -> void {
                 // Double defense for a turn
                 player.toggle_defending();
                 // Process enemy attack if not defending
@@ -101,11 +128,10 @@ void Arena::fight_menu() {
                 }
                 continue_round = true;
             }));
-        }
 
-        menu_items.push_back(std::make_pair("Check Consumables", [this]() -> void {
-            consumables_menu();
-        }));
+        if(!safe_death) menu_items.push_back(std::make_pair("Check Consumables", [this]() -> void {
+                consumables_menu();
+            }));
 
         menu_items.push_back(std::make_pair("Check Statistics", [this]() -> void {
             print_stats();
@@ -117,8 +143,8 @@ void Arena::fight_menu() {
     player.reset_temps();
 
     // Check for deaths
-    if(!enemy.is_alive()) enemy_death();
-    else if(!player.is_alive()) player_death();
+    if(!enemy.is_alive()) enemy_death(safe_death);
+    else if(!player.is_alive()) player_death(safe_death);
     else {
         std::cout << "Something went wrong -> Fight ended but both fighters have health\n";
         pause_until_enter();
@@ -129,7 +155,7 @@ void Arena::fight_menu() {
 };
 
 void Arena::train_menu() {
-    std::cout << "You will have to pay gold to train.\n";
+    fight_menu(true);
 };
 
 void Arena::pre_round_checks(Combat &fighter) {
@@ -268,6 +294,8 @@ void Arena::enemy_death(bool training) {
     if(!training) {
         player.increase_gold(enemy.gold_reward());
         std::cout << "You are rewarded with " << enemy.gold_reward() << " gold pieces.\n";
+    } else {
+        player.reset_health();
     }
     player.gain_experience(enemy.experience_reward());
     save_to_file();
@@ -278,22 +306,25 @@ void Arena::enemy_death(bool training) {
         std::cout << enemy.get_name() << " is impressed and wants to offer up their "
             << weapon_name << " as a token of respect!\n";
         
-        menu_items.clear();
+        bool early_return = false;
+        do {
+            menu_items.clear();
 
-        menu_items.push_back(std::make_pair("Blank", []() -> void {}));
-        menu_items.push_back(std::make_pair("Take " + weapon_name, [this]() -> void {
-            player.insert_item(enemy.get_weapon());
-            std::cout << "You thank them and humbly accept their "
-                << enemy.get_weapon()->ITEM_NAME << ".\n";
-            save_to_file();
-            pause_until_enter();
-        }));
-        menu_items.push_back(std::make_pair("Humbly decline", []() -> void {
-            std::cout << "Although you appreciate the gesture, you decline their offer"
-                << " and let them know you hope to cross paths again.\n";
-            pause_until_enter();
-        }));
-
-        print_menu(menu_items, true);
+            menu_items.push_back(std::make_pair("Blank", []() -> void {}));
+            menu_items.push_back(std::make_pair("Take " + weapon_name, [this, &early_return]() -> void {
+                player.insert_item(enemy.get_weapon());
+                std::cout << "You thank them and humbly accept their "
+                    << enemy.get_weapon()->ITEM_NAME << ".\n";
+                save_to_file();
+                pause_until_enter();
+                early_return = true;
+            }));
+            menu_items.push_back(std::make_pair("Humbly decline", [&early_return]() -> void {
+                std::cout << "Although you appreciate the gesture, you decline their offer"
+                    << " and let them know you hope to cross paths again.\n";
+                pause_until_enter();
+                early_return = true;
+            }));
+        } while(print_menu(menu_items, true) && !early_return);
     }
 };

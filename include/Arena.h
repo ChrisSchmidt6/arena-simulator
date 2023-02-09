@@ -14,7 +14,7 @@ private:
     Player &player = Player::get();
     Enemy enemy = Enemy::generate_enemy(Player::get().get_stat("Level"));
 
-    void fight_menu();
+    void fight_menu(bool safe_death = false);
     void train_menu();
     void pre_round_checks(Combat &fighter);
     void process_attack(Combat &attacker, Combat &defender);
