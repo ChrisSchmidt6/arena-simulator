@@ -99,15 +99,16 @@ Enemy Enemy::generate_enemy(const int tier) {
         std::uniform_int_distribution<int> stat_inc_dist(1, available_stat_points);
         int increase_amount = stat_inc_dist(mt);
 
-        // If stat to be changed is weapon tier, and amount is greater than max weapon tier,
-        // instead change weapon tier to max amount and deduct that from points
-        if(stat_to_increase == &weapon_tier && increase_amount > max_weapon_tier) {
-            available_stat_points -= (max_weapon_tier - *stat_to_increase);
-            *stat_to_increase = max_weapon_tier;
-        } else {
-            // Otherwise carry on as normal
-            *stat_to_increase += increase_amount;
-            available_stat_points -= increase_amount;
+        // Increase stat by amount, remove amount from available points
+        *stat_to_increase += increase_amount;
+        available_stat_points -= increase_amount;
+
+        // If stat to be changed is weapon_tier and is greater than max_weapon_tier,
+        // set it to max_weapon_tier and refund the difference
+        if(stat_to_increase == &weapon_tier && weapon_tier > max_weapon_tier) {
+            int change_amount = max_weapon_tier - weapon_tier;
+            available_stat_points += change_amount;
+            weapon_tier = max_weapon_tier;
         }
 
         // Remove stat from list of stats
