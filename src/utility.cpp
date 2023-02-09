@@ -7,7 +7,7 @@
 #include "utility.h"
 
 void print_separator() {
-    std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+    std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 }
 
 bool print_menu(pairVec menu_items, bool print_plain) {
@@ -101,7 +101,7 @@ bool load_save_file() {
             std::cout << "You have successfully loaded character: " << Player::get().name << "\n\n";
             return true;
         } else {
-            std::cout << "Could not load the character. Corrupted save data.\n";
+            std::cout << "Could not load the character. Corrupted save data.\n\n";
             return false;
         }
     }

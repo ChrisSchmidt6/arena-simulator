@@ -66,29 +66,34 @@ bool Game::initiate_character() {
     pairVec menu_items;
 
     bool success_initiating = false;
-    
-    std::cout << "[Start Menu]\n";
+    bool return_early = false;
 
-    menu_items.push_back(std::make_pair("Exit", [this]() -> void {
-        active = false;
-    }));
+    do {
+        std::cout << "[Start Menu]\n";
 
-    menu_items.push_back(std::make_pair("Create character", [&success_initiating]() -> void {
-        std::cout << "Please enter the name of your new character: ";
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::getline(std::cin, Player::get().name);
-        std::cout << "\n";
-        if(create_save_file()) success_initiating = true;
-    }));
+        menu_items.clear();
 
-    menu_items.push_back(std::make_pair("Load character", [&success_initiating]() -> void {
-        std::cout << "Please enter the name of the character you'd like to load: ";
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::getline(std::cin, Player::get().name);
-        std::cout << "\n";
-        if(load_save_file()) success_initiating = true;
-    }));
-    print_menu(menu_items, true);
+        menu_items.push_back(std::make_pair("Exit", [this, &return_early]() -> void {
+            active = false;
+            return_early = true;
+        }));
+
+        menu_items.push_back(std::make_pair("Create character", [&success_initiating]() -> void {
+            std::cout << "Please enter the name of your new character: ";
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::getline(std::cin, Player::get().name);
+            std::cout << "\n";
+            if (create_save_file()) success_initiating = true;
+        }));
+
+        menu_items.push_back(std::make_pair("Load character", [&success_initiating]() -> void {
+            std::cout << "Please enter the name of the character you would like to load: ";
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::getline(std::cin, Player::get().name);
+            std::cout << "\n";
+            if (load_save_file()) success_initiating = true;
+        }));
+    } while (print_menu(menu_items, true) && (!success_initiating && !return_early));
 
     return success_initiating;
 };
