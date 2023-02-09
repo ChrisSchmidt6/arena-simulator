@@ -28,12 +28,20 @@ inline std::vector<Item*> item_container {
     new Consumable(114, "Large Combat Potion", VenType::Apothecary, 40, 9, Rarity::Uncommon, false, 3, 3, 3, 0),
 
     // Consumable food
-    new Consumable(150, "Stale Bread", VenType::Chef, 12, 1, Rarity::Common, true, 0, 0, 0, 4),
-    new Consumable(151, "Chunky Stew", VenType::Chef, 12, 1, Rarity::Common, true, 0, 0, 0, 4),
-    new Consumable(152, "Assorted Berries", VenType::Chef, 12, 1, Rarity::Common, true, 0, 0, 0, 4),
-    new Consumable(153, "Fresh Bread", VenType::Chef, 15, 2, Rarity::Common, false, 0, 0, 0, 6),
-    new Consumable(154, "Steamed Veggies", VenType::Chef, 15, 2, Rarity::Common, false, 0, 0, 0, 6),
-    new Consumable(155, "Meaty Sandwich", VenType::Chef, 18, 2, Rarity::Uncommon, false, 0, 0, 0, 7),
+    new Consumable(150, "Stale Bread", VenType::Chef, 3, 1, Rarity::Common, true, 0, 0, 0, 4),
+    new Consumable(151, "Chunky Stew", VenType::Chef, 3, 1, Rarity::Common, true, 0, 0, 0, 4),
+    new Consumable(152, "Assorted Berries", VenType::Chef, 3, 1, Rarity::Common, true, 0, 0, 0, 4),
+    new Consumable(153, "Fresh Bread", VenType::Chef, 5, 1, Rarity::Common, false, 0, 0, 0, 6),
+    new Consumable(154, "Steamed Veggies", VenType::Chef, 5, 1, Rarity::Common, false, 0, 0, 0, 6),
+    new Consumable(155, "Meaty Sandwich", VenType::Chef, 6, 2, Rarity::Common, false, 0, 0, 0, 7),
+    new Consumable(156, "Blackberry Pie", VenType::Chef, 10, 2, Rarity::Common, false, 0, 0, 0, 9),
+    new Consumable(157, "Chocolate Pastry", VenType::Chef, 10, 2, Rarity::Common, false, 0, 0, 0, 9),
+    new Consumable(158, "Banana Muffin", VenType::Chef, 12, 3, Rarity::Common, false, 0, 0, 0, 10),
+    new Consumable(159, "Lean Venison", VenType::Chef, 12, 3, Rarity::Common, false, 0, 0, 0, 10),
+    new Consumable(160, "Cooked Fish", VenType::Chef, 15, 4, Rarity::Uncommon, false, 0, 0, 0, 12),
+    new Consumable(161, "Boiled Eggs", VenType::Chef, 15, 4, Rarity::Uncommon, false, 0, 0, 0, 12),
+    new Consumable(162, "Cooked Lamb", VenType::Chef, 15, 4, Rarity::Uncommon, false, 0, 0, 0, 12),
+    new Consumable(163, "Smoked Salmon", VenType::Chef, 18, 5, Rarity::Uncommon, false, 0, 0, 0, 14),
 
     // Weapons
     new Weapon(200, "Glorious Fists", VenType::None, 0, 0, Rarity::Common, false, 0),
