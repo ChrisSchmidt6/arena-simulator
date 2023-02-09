@@ -367,7 +367,7 @@ bool Player::load_save_data(std::string &save_data) {
 
         // Calibrate experience variables
         int i = 0;
-        while(i++ < level) {
+        while(i++ < level - 1) {
             total_experience += experience_target;
             experience_target *= EXPERIENCE_SCALING;
         }
