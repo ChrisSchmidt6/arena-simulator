@@ -37,7 +37,7 @@ protected:
     int accuracy = 1;
     int defense = 1;
     int level = 1;
-    int gold = 20;
+    int gold = 30;
     Item* weapon_slot = get_item(200);
 
     int att_boost = 0;
