@@ -19,7 +19,7 @@ private:
     void pre_round_checks(Combat &fighter);
     void process_attack(Combat &attacker, Combat &defender);
     void print_stats();
-    void consumables_menu();
+    void potions_menu();
     void player_death(bool training = false);
     void enemy_death(bool training = false);
 };

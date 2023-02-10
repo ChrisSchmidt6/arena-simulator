@@ -23,9 +23,8 @@ struct Player : Combat {
     int has_item(Item* item); // returns position of item in inventory, -1 if not found
     void equip_weapon(Item* weapon);
     void remove_weapon();
-    std::vector<Consumable*> get_potions();
+    std::vector<Item*> get_items_by_type(VenType type);
     void drink_potion(Consumable* potion);
-    std::vector<Consumable*> get_food();
     void eat_food(Consumable* food);
     int weapon_drop_chance();
     void increase_gold(int amount);

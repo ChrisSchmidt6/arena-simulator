@@ -129,7 +129,7 @@ void Arena::fight_menu(bool safe_death) {
             }));
 
         if(!safe_death) menu_items.push_back(std::make_pair("Check Potions", [this]() -> void {
-                consumables_menu();
+                potions_menu();
             }));
 
         menu_items.push_back(std::make_pair("Check Statistics", [this]() -> void {
@@ -231,10 +231,17 @@ void Arena::print_stats() {
     pause_until_enter();
 };
 
-void Arena::consumables_menu() {
+void Arena::potions_menu() {
     pairVec menu_items;
 
-    int potion_amount = player.get_potions().size();
+    std::vector<Consumable*> potions;
+
+    for(int i = 0; i < player.get_items_by_type(VenType::Apothecary).size(); i++) {
+        Item* potion = player.get_items_by_type(VenType::Apothecary)[i];
+        potions.push_back(static_cast<Consumable*>(potion));
+    }
+
+    int potion_amount = potions.size();
     if(potion_amount == 0) {
         std::cout << "You do not have any potions in your inventory.\n";
         pause_until_enter();
@@ -250,9 +257,9 @@ void Arena::consumables_menu() {
         }));
 
         for(int i = 0; i < potion_amount; i++) {
-            Consumable* potion = player.get_potions()[i];
-            menu_items.push_back(std::make_pair("Drink " + potion->ITEM_NAME, [this, i, &go_back]() -> void {
-                player.drink_potion(player.get_potions()[i]);
+            Consumable* potion = potions[i];
+            menu_items.push_back(std::make_pair("Drink " + potions[i]->ITEM_NAME, [this, potion, &go_back]() -> void {
+                player.drink_potion(potion);
                 if(!enemy.is_defending()) process_attack(enemy, player);
                 continue_round = true;
                 go_back = true;

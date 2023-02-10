@@ -175,14 +175,14 @@ void Player::weapon_menu() {
     } while(print_menu(menu_items));
 };
 
-std::vector<Consumable*> Player::get_potions() {
-    std::vector<Consumable*> consumables;
+std::vector<Item*> Player::get_items_by_type(VenType type) {
+    std::vector<Item*> items;
     for(int i = 0; i < inventory.size(); i++) {
-        if(inventory[i]->TYPE == VenType::Apothecary) {
-            consumables.push_back(static_cast<Consumable*>(inventory[i]));
+        if(inventory[i]->TYPE == type) {
+            items.push_back(inventory[i]);
         }
     }
-    return consumables;
+    return items;
 };
 
 void Player::drink_potion(Consumable* potion) {
@@ -196,16 +196,6 @@ void Player::drink_potion(Consumable* potion) {
     health = new_health > max_health ? max_health : new_health;
     save_to_file();
     pause_until_enter();
-};
-
-std::vector<Consumable*> Player::get_food() {
-    std::vector<Consumable*> food;
-    for(int i = 0; i < inventory.size(); i++) {
-        if(inventory[i]->TYPE == VenType::Chef) {
-            food.push_back(static_cast<Consumable*>(inventory[i]));
-        }
-    }
-    return food;
 };
 
 void Player::eat_food(Consumable* food) {

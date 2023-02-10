@@ -7,7 +7,22 @@
 #include "assets.h"
 #include "utility.h"
 
-Vendor::Vendor(VenType type): TYPE(type) {};
+Vendor::Vendor(VenType type): TYPE(type) {
+    switch(TYPE) {
+        case VenType::Apothecary:
+            vendor_type = "Apothecary";
+            break;
+        case VenType::Blacksmith:
+            vendor_type = "Blacksmith";
+            break;
+        case VenType::Chef:
+            vendor_type = "Chef";
+            break;
+        case VenType::None:
+            vendor_type = "Unknown";
+            break;
+    };
+};
 
 void Vendor::main_menu(Vendor& apothecary, Vendor& blacksmith, Vendor& chef) {
     pairVec menu_items;
@@ -18,13 +33,32 @@ void Vendor::main_menu(Vendor& apothecary, Vendor& blacksmith, Vendor& chef) {
         menu_items.clear();
 
         menu_items.push_back(std::make_pair("Apothecary", [&apothecary]() -> void {
-            apothecary.buy_menu();
+            apothecary.business_menu();
         }));
         menu_items.push_back(std::make_pair("Blacksmith", [&blacksmith]() -> void {
-            blacksmith.buy_menu();
+            blacksmith.business_menu();
         }));
         menu_items.push_back(std::make_pair("Chef", [&chef]() -> void {
-            chef.buy_menu();
+            chef.business_menu();
+        }));
+    } while(print_menu(menu_items));
+};
+
+void Vendor::business_menu() {
+    pairVec menu_items;
+
+    do {
+        std::cout << "What kind of business would you like to do?\n\n";
+        std::cout << "[" << vendor_type << " Type of Business Menu]\n";
+
+        menu_items.clear();
+
+        menu_items.push_back(std::make_pair("Please show me what you have for sale.", [this]() -> void {
+            buy_menu();
+        }));
+
+        menu_items.push_back(std::make_pair("Are you interested in any of my goods?", [this]() -> void {
+            sell_menu();
         }));
     } while(print_menu(menu_items));
 };
@@ -35,7 +69,7 @@ void Vendor::buy_menu() {
     std::cout << "You have " << Player::get().get_stat("Gold") << " gold pieces to spend.\n\n";
 
     do {
-        std::cout << "[Vendor Purchase Menu]\n";
+        std::cout << "[" << vendor_type << " Inventory Menu]\n";
 
         menu_items.clear();
 
@@ -57,7 +91,67 @@ void Vendor::buy_menu() {
 };
 
 void Vendor::sell_menu() {
-    std::cout << "Let's see what you've got!\n\n";
+    std::vector<Item*> sale_goods = Player::get().get_items_by_type(TYPE);
+
+    if(sale_goods.size() == 0) {
+        std::cout << "Sorry, you do not seem to have anything of interest to me.\n";
+        pause_until_enter();
+        return;
+    }
+
+    pairVec menu_items;
+
+    do {
+        sale_goods = Player::get().get_items_by_type(TYPE);
+        if(sale_goods.size() == 0) {
+            std::cout << "It looks like you no longer have anything of interest to me. Come back any time.\n";
+            pause_until_enter();
+            return;
+        }
+
+        std::cout << "You have " << Player::get().get_stat("Gold") << " gold pieces.\n\n";
+        std::cout << "[" << vendor_type << " Purchase Menu]\n";
+
+        menu_items.clear();
+
+        for(int i = 0; i < sale_goods.size(); i++) {
+            Item* item = sale_goods[i];
+            int sale_price = item->PRICE * SALE_PERCENT;
+            sale_price = sale_price < 1 ? 1 : sale_price;
+            menu_items.push_back(std::make_pair(
+                "Sell " + item->ITEM_NAME + ": " + std::to_string(sale_price) + " gold pieces",
+                [this, item, sale_price]() -> void {
+                    pairVec menu_items;
+                    bool return_early;
+
+                    do {
+                        std::cout << "Sell your " << item->ITEM_NAME << " for "
+                            << std::to_string(sale_price) << " gold pieces?\n";
+                        std::cout << "[Confirmation Menu]\n";
+
+                        menu_items.clear();
+
+                        menu_items.push_back(std::make_pair("Yes", [this, item, sale_price, &return_early]() -> void {
+                            Player::get().remove_item(item);
+                            Player::get().increase_gold(sale_price);
+
+                            // If space for item, add to vendor's inventory
+                            if(inventory.size() < 4) inventory.push_back(item);
+
+                            std::cout << "You have sold your " << item->ITEM_NAME << " for " <<
+                                std::to_string(sale_price) << " gold pieces.\n";
+                            save_to_file();
+                            pause_until_enter();
+                            return_early = true;
+                        }));
+
+                        menu_items.push_back(std::make_pair("No", [&return_early]() -> void {
+                            return_early = true;
+                        }));
+                    } while(print_menu(menu_items) && !return_early);
+                }));
+        }
+    } while(print_menu(menu_items));
 };
 
 void Vendor::remove_item(int location) {
