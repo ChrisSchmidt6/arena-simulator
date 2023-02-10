@@ -6,7 +6,6 @@
 #include "utility.h"
 
 void Arena::main_menu() {
-    const int tier = player.get_stat("Level");
     pairVec menu_items;
 
     do {
@@ -15,40 +14,30 @@ void Arena::main_menu() {
 
         menu_items.clear();
 
-        menu_items.push_back(std::make_pair("Fight", [this, tier]() -> void {
+        menu_items.push_back(std::make_pair("Fight", [this]() -> void {
             // Generate new enemy if previously generated enemy is lower level
-            if(enemy.get_stat("Level") != tier) enemy = Enemy::generate_enemy(tier);
+            enemy = Enemy::generate_enemy(player.get_stat("Level"));
             fight_menu();
         }));
 
-        menu_items.push_back(std::make_pair("Train", [this, tier]() -> void {
-            int amount = tier * 5;
+        menu_items.push_back(std::make_pair("Train", [this]() -> void {
+            int amount = player.get_stat("Level") * 3.5;
             if(player.get_stat("Gold") < amount) {
                 std::cout << "You don't have " << amount << " gold pieces to spend.\n";
                 pause_until_enter();
                 return;
             }
 
-            pairVec confirm_items;
-            bool early_return = false;
-
-            do {
-                std::cout << "There is a " << amount << " gold entry fee. Will you pay it?\n";
-                std::cout << "[Confirmation Menu]\n";
-                
-                confirm_items.push_back(std::make_pair("Yes", [this, tier, amount, &early_return]() -> void {
-                    if(enemy.get_stat("Level") != tier - 1) enemy = Enemy::generate_enemy(tier - 1);
+            confirmation_menu(
+                "There is a " + std::to_string(amount) + " gold piece entry fee. Will you pay it?",
+                [this, amount]() -> void {
                     player.decrease_gold(amount);
                     std::cout << "You have paid " << amount << " gold pieces to train.\n";
                     pause_until_enter();
+                    enemy = Enemy::generate_enemy(player.get_stat("Level") - 1);
                     train_menu();
-                    early_return = true;
-                }));
-
-                confirm_items.push_back(std::make_pair("No", [&early_return]() -> void {
-                    early_return = true;
-                }));
-            } while(print_menu(confirm_items) && !early_return);
+                }
+            );
             
         }));
 
@@ -148,9 +137,6 @@ void Arena::fight_menu(bool safe_death) {
         std::cout << "Something went wrong -> Fight ended but both fighters have health\n";
         pause_until_enter();
     }
-
-    // Generate new enemy for a future fight
-    enemy = Enemy::generate_enemy(tier);
 };
 
 void Arena::train_menu() {

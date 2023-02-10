@@ -72,7 +72,7 @@ Enemy Enemy::generate_enemy(const int tier) {
     // Base pool of 3 stat increases unless training
     // Add another stat increase every 2nd tier increase if not training
     int available_stat_points = 0;
-    if(tier >= Player::get().get_stat("Level")) {
+    if(tier > 3) {
         available_stat_points =  3;
         available_stat_points += floor(tier / 5);
     }
