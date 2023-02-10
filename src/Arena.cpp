@@ -1,5 +1,4 @@
 #include <iostream>
-#include <iomanip>
 #include <random>
 
 #include "Arena.h"
@@ -129,7 +128,7 @@ void Arena::fight_menu(bool safe_death) {
                 continue_round = true;
             }));
 
-        if(!safe_death) menu_items.push_back(std::make_pair("Check Consumables", [this]() -> void {
+        if(!safe_death) menu_items.push_back(std::make_pair("Check Potions", [this]() -> void {
                 consumables_menu();
             }));
 
