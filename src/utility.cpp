@@ -68,7 +68,7 @@ void confirmation_menu(std::string question, std::function<void()> action) {
     bool return_early;
 
     do {
-        std::cout << question << "\n";
+        std::cout << question << "\n\n";
         std::cout << "[Confirmation Menu]\n";
 
         menu_items.clear();
