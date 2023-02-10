@@ -9,6 +9,7 @@ typedef std::vector<std::pair<std::string, std::function<void()>>> pairVec;
 
 void print_separator();
 bool print_menu(pairVec menu_items, bool print_plain = false);
+void confirmation_menu(std::string question, std::function<void()> action);
 void pause_until_enter();
 
 void save_to_file();

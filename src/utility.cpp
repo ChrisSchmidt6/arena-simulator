@@ -63,6 +63,27 @@ bool print_menu(pairVec menu_items, bool print_plain) {
     return true;
 }
 
+void confirmation_menu(std::string question, std::function<void()> action) {
+    pairVec menu_items;
+    bool return_early;
+
+    do {
+        std::cout << question << "\n";
+        std::cout << "[Confirmation Menu]\n";
+
+        menu_items.clear();
+
+        menu_items.push_back(std::make_pair("Yes", [action, &return_early]() -> void {
+            action();
+            return_early = true;
+        }));
+
+        menu_items.push_back(std::make_pair("No", [&return_early]() -> void {
+            return_early = true;
+        }));
+    } while(print_menu(menu_items) && !return_early);
+}
+
 void pause_until_enter() {
     std::cout << "Press Enter to continue ...\n";
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
