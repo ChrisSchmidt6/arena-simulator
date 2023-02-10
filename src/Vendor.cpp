@@ -66,9 +66,8 @@ void Vendor::business_menu() {
 void Vendor::buy_menu() {
     pairVec menu_items;
 
-    std::cout << "You have " << Player::get().get_stat("Gold") << " gold pieces to spend.\n\n";
-
     do {
+        std::cout << "You have " << Player::get().get_stat("Gold") << " gold pieces to spend.\n\n";
         std::cout << "[" << vendor_type << " Inventory Menu]\n";
 
         menu_items.clear();
@@ -77,15 +76,29 @@ void Vendor::buy_menu() {
             Item* item = inventory[i];
             menu_items.push_back(std::make_pair(
                 "Buy " + item->ITEM_NAME + ": " + std::to_string(item->PRICE) + " gold pieces",
-                [item, this, i]() -> void {
-                    if(Player::get().buy_item(item)) {
-                        remove_item(i);
-                        std::cout << "You have purchased the " << item->ITEM_NAME << " for " << item->PRICE << " gold pieces.\n";
+                [this, item, i]() -> void {
+                    if(Player::get().get_stat("Gold") < item->PRICE) {
+                        std::cout << "You do not have enough gold pieces for that item.\n";
                         pause_until_enter();
                     } else {
-                        std::cout << "You do not have enough gold pieces for that item.\n\n";
+                        confirmation_menu(
+                            "Purchase " + item->ITEM_NAME + " for " + std::to_string(item->PRICE) + " gold pieces?",
+                            [this, item, i]() -> void {
+                                Player::get().buy_item(item);
+                                remove_item(i);
+
+                                // If space for item, add to vendor's inventory
+                                if(inventory.size() < 4) inventory.push_back(item);
+
+                                std::cout << "You have purchased the " << item->ITEM_NAME<< " for "
+                                    << item->PRICE << " gold pieces.\n";
+                                save_to_file();
+                                pause_until_enter();
+                            }
+                        );
                     }
-                }));
+                }
+            ));
         }
     } while(print_menu(menu_items));
 };
@@ -118,20 +131,13 @@ void Vendor::sell_menu() {
             Item* item = sale_goods[i];
             int sale_price = item->PRICE * SALE_PERCENT;
             sale_price = sale_price < 1 ? 1 : sale_price;
+
             menu_items.push_back(std::make_pair(
                 "Sell " + item->ITEM_NAME + ": " + std::to_string(sale_price) + " gold pieces",
                 [this, item, sale_price]() -> void {
-                    pairVec menu_items;
-                    bool return_early;
-
-                    do {
-                        std::cout << "Sell your " << item->ITEM_NAME << " for "
-                            << std::to_string(sale_price) << " gold pieces?\n";
-                        std::cout << "[Confirmation Menu]\n";
-
-                        menu_items.clear();
-
-                        menu_items.push_back(std::make_pair("Yes", [this, item, sale_price, &return_early]() -> void {
+                    confirmation_menu(
+                        "Sell your " + item->ITEM_NAME + " for " + std::to_string(sale_price) + " gold pieces?",
+                        [this, item, sale_price]() -> void {
                             Player::get().remove_item(item);
                             Player::get().increase_gold(sale_price);
 
@@ -142,14 +148,10 @@ void Vendor::sell_menu() {
                                 std::to_string(sale_price) << " gold pieces.\n";
                             save_to_file();
                             pause_until_enter();
-                            return_early = true;
-                        }));
-
-                        menu_items.push_back(std::make_pair("No", [&return_early]() -> void {
-                            return_early = true;
-                        }));
-                    } while(print_menu(menu_items) && !return_early);
-                }));
+                        }
+                    );
+                }
+            ));
         }
     } while(print_menu(menu_items));
 };
