@@ -45,6 +45,13 @@ int Enemy::get_stat(std::string stat) {
 };
 
 int Enemy::gold_reward() {
+    std::random_device rd;
+    std::mt19937 mt(rd());
+
+    int min_gold = GOLD_MIN_BASE + (level * GOLD_MIN_MOD);
+    int max_gold = GOLD_MAX_BASE + (level * GOLD_MAX_MOD);
+    std::uniform_int_distribution<int> gold_dist(min_gold, max_gold);
+    gold = gold_dist(mt);
     return gold;
 };
 
@@ -58,10 +65,11 @@ bool Enemy::weapon_reward() {
 };
 
 int Enemy::experience_reward() {
+    experience_rewarded = max_health * XP_MOD;
     return experience_rewarded;
 };
 
-Enemy Enemy::generate_enemy(const int tier) {
+Enemy Enemy::generate_enemy(const int TIER) {
     std::random_device rd;
     std::mt19937 mt(rd());
 
@@ -72,20 +80,20 @@ Enemy Enemy::generate_enemy(const int tier) {
     // Base pool of 3 stat increases unless training
     // Add another stat increase every 2nd tier increase if not training
     int available_stat_points = 0;
-    if(tier > 3) {
+    if(TIER > 3) {
         available_stat_points =  3;
-        available_stat_points += floor(tier / 5);
+        available_stat_points += floor(TIER / 5);
     }
 
     // Every 4th tier, increase base stats by 1
-    const int BASE_INCREASE = floor(tier / 3);
-    int base_health = 10 + floor(tier / 2);
+    const int BASE_INCREASE = floor(TIER / 3);
+    int base_health = 10 + floor(TIER / 2);
     int max_health = base_health + BASE_INCREASE;
     int attack = 1 + BASE_INCREASE;
     int accuracy = 1 + BASE_INCREASE;
     int defense = 1 + BASE_INCREASE;
     int weapon_tier = 1 + BASE_INCREASE;
-    int max_weapon_tier = tier + 1;
+    int max_weapon_tier = TIER + 1;
 
     std::vector<int*> stats = { &max_health, &attack, &accuracy, &defense, &weapon_tier };
 
@@ -127,13 +135,8 @@ Enemy Enemy::generate_enemy(const int tier) {
     std::uniform_int_distribution<int> weapon_dist(0, weapon_options.size() - 1);
     Item* weapon = weapon_options[weapon_dist(mt)];
 
-    // Randomize rewards
-    int min_gold = 2 * tier;
-    int max_gold = 3 * tier;
-    std::uniform_int_distribution<int> gold_dist(min_gold, max_gold);
-    int gold = gold_dist(mt);
+    // Randomize weapon reward chance
     int drop_weapon_chance;
-    int experience_rewarded = 1.5 * max_health;
 
     switch(weapon->RARITY) {
         case Rarity::Common:
@@ -154,7 +157,7 @@ Enemy Enemy::generate_enemy(const int tier) {
     };
 
     return Enemy(
-        name, max_health, attack, accuracy, defense, tier,
-        experience_rewarded, gold, drop_weapon_chance, weapon
+        name, max_health, attack, accuracy, defense, TIER,
+        0, 0, drop_weapon_chance, weapon
     );
 };
