@@ -87,9 +87,6 @@ void Vendor::buy_menu() {
                                 Player::get().buy_item(item);
                                 remove_item(i);
 
-                                // If space for item, add to vendor's inventory
-                                if(inventory.size() < 4) inventory.push_back(item);
-
                                 std::cout << "You have purchased the " << item->ITEM_NAME<< " for "
                                     << item->PRICE << " gold pieces.\n";
                                 save_to_file();
