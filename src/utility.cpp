@@ -73,6 +73,8 @@ void confirmation_menu(std::string question, std::function<void()> action) {
 
         menu_items.clear();
 
+        menu_items.push_back(std::make_pair("Blank", [action, &return_early]() -> void {}));
+
         menu_items.push_back(std::make_pair("Yes", [action, &return_early]() -> void {
             action();
             return_early = true;
@@ -81,7 +83,7 @@ void confirmation_menu(std::string question, std::function<void()> action) {
         menu_items.push_back(std::make_pair("No", [&return_early]() -> void {
             return_early = true;
         }));
-    } while(print_menu(menu_items) && !return_early);
+    } while(print_menu(menu_items, true) && !return_early);
 }
 
 void pause_until_enter() {
