@@ -23,16 +23,16 @@ void Arena::main_menu() {
         menu_items.push_back(std::make_pair("Train", [this]() -> void {
             int amount = player.get_stat("Level") * 3.5;
             if(player.get_stat("Gold") < amount) {
-                std::cout << "You don't have " << amount << " gold pieces to spend.\n";
+                std::cout << "You don't have " << amount << " gold to spend.\n";
                 pause_until_enter();
                 return;
             }
 
             confirmation_menu(
-                "There is a " + std::to_string(amount) + " gold piece entry fee. Will you pay it?",
+                "There is a " + std::to_string(amount) + " gold entry fee. Will you pay it?",
                 [this, amount]() -> void {
                     player.decrease_gold(amount);
-                    std::cout << "You have paid " << amount << " gold pieces to train.\n";
+                    std::cout << "You have paid " << amount << " gold to train.\n";
                     pause_until_enter();
                     enemy = Enemy::generate_enemy(player.get_stat("Level") - 1);
                     train_menu();
@@ -262,7 +262,7 @@ void Arena::player_death(bool training) {
             int gold_deducted = enemy.gold_reward() / 2;
             if(gold_deducted < 1) gold_deducted = 1;
             player.decrease_gold(gold_deducted);
-            std::cout << "You paid " << enemy.get_name() << " " << gold_deducted << " gold piece(s).\n";
+            std::cout << "You paid " << enemy.get_name() << " " << gold_deducted << " gold.\n";
         }
 
         std::random_device rd;
@@ -285,7 +285,7 @@ void Arena::enemy_death(bool training) {
     // Claim gold and experience
     if(!training) {
         player.increase_gold(enemy.gold_reward());
-        std::cout << "You are rewarded with " << enemy.gold_reward() << " gold pieces.\n";
+        std::cout << "You are rewarded with " << enemy.gold_reward() << " gold.\n";
     } else {
         player.reset_health();
     }

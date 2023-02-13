@@ -121,7 +121,7 @@ void Player::inventory_menu() {
     pairVec menu_items;
 
     do {
-        std::cout << "You have " << gold << " gold pieces.\n\n";
+        std::cout << "You have " << gold << " gold.\n\n";
         std::cout << "[Inventory Menu]\n";
 
         menu_items.clear();

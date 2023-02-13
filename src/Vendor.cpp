@@ -67,7 +67,7 @@ void Vendor::buy_menu() {
     pairVec menu_items;
 
     do {
-        std::cout << "You have " << Player::get().get_stat("Gold") << " gold pieces to spend.\n\n";
+        std::cout << "You have " << Player::get().get_stat("Gold") << " gold to spend.\n\n";
         std::cout << "[" << vendor_type << " Inventory Menu]\n";
 
         menu_items.clear();
@@ -75,20 +75,20 @@ void Vendor::buy_menu() {
         for(int i = 0; i < inventory.size(); i++) {
             Item* item = inventory[i];
             menu_items.push_back(std::make_pair(
-                "Buy " + item->ITEM_NAME + ": " + std::to_string(item->PRICE) + " gold pieces",
+                "Buy " + item->ITEM_NAME + ": " + std::to_string(item->PRICE) + " gold",
                 [this, item, i]() -> void {
                     if(Player::get().get_stat("Gold") < item->PRICE) {
-                        std::cout << "You do not have enough gold pieces for that item.\n";
+                        std::cout << "You do not have enough gold for that item.\n";
                         pause_until_enter();
                     } else {
                         confirmation_menu(
-                            "Purchase " + item->ITEM_NAME + " for " + std::to_string(item->PRICE) + " gold pieces?",
+                            "Purchase " + item->ITEM_NAME + " for " + std::to_string(item->PRICE) + " gold?",
                             [this, item, i]() -> void {
                                 Player::get().buy_item(item);
                                 remove_item(i);
 
                                 std::cout << "You have purchased the " << item->ITEM_NAME<< " for "
-                                    << item->PRICE << " gold pieces.\n";
+                                    << item->PRICE << " gold.\n";
                                 save_to_file();
                                 pause_until_enter();
                             }
@@ -119,7 +119,7 @@ void Vendor::sell_menu() {
             return;
         }
 
-        std::cout << "You have " << Player::get().get_stat("Gold") << " gold pieces.\n\n";
+        std::cout << "You have " << Player::get().get_stat("Gold") << " gold.\n\n";
         std::cout << "[" << vendor_type << " Purchase Menu]\n";
 
         menu_items.clear();
@@ -130,10 +130,10 @@ void Vendor::sell_menu() {
             sale_price = sale_price < 1 ? 1 : sale_price;
 
             menu_items.push_back(std::make_pair(
-                "Sell " + item->ITEM_NAME + ": " + std::to_string(sale_price) + " gold pieces",
+                "Sell " + item->ITEM_NAME + ": " + std::to_string(sale_price) + " gold",
                 [this, item, sale_price]() -> void {
                     confirmation_menu(
-                        "Sell your " + item->ITEM_NAME + " for " + std::to_string(sale_price) + " gold pieces?",
+                        "Sell your " + item->ITEM_NAME + " for " + std::to_string(sale_price) + " gold?",
                         [this, item, sale_price]() -> void {
                             Player::get().remove_item(item);
                             Player::get().increase_gold(sale_price);
@@ -142,7 +142,7 @@ void Vendor::sell_menu() {
                             if(inventory.size() < 4) inventory.push_back(item);
 
                             std::cout << "You have sold your " << item->ITEM_NAME << " for " <<
-                                std::to_string(sale_price) << " gold pieces.\n";
+                                std::to_string(sale_price) << " gold.\n";
                             save_to_file();
                             pause_until_enter();
                         }
