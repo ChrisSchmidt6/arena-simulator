@@ -15,9 +15,14 @@ void Arena::main_menu() {
         menu_items.clear();
 
         menu_items.push_back(std::make_pair("Fight", [this]() -> void {
-            // Generate new enemy if previously generated enemy is lower level
-            enemy = Enemy::generate_enemy(player.get_stat("Level"));
-            fight_menu();
+            confirmation_menu(
+                "If you lose the fight you will lose gold and possibly your weapon. Are you sure you want to fight?",
+                [this]() -> void {
+                    // Generate new enemy if previously generated enemy is lower level
+                    enemy = Enemy::generate_enemy(player.get_stat("Level"));
+                    fight_menu();
+                }
+            );
         }));
 
         menu_items.push_back(std::make_pair("Train", [this]() -> void {
