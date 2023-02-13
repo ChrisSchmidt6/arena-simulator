@@ -2,9 +2,9 @@
 
 #include <string>
 
-#include "Item.h"
-#include "Weapon.h"
-#include "assets.h"
+#include "Item.hpp"
+#include "Weapon.hpp"
+#include "assets.hpp"
 
 struct Combat {
     virtual std::string get_name() = 0;

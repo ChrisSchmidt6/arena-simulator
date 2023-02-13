@@ -1,9 +1,9 @@
 #include <iostream>
 #include <limits>
 
-#include "Weapon.h"
-#include "Player.h"
-#include "utility.h"
+#include "Weapon.hpp"
+#include "Player.hpp"
+#include "utility.hpp"
 
 void Weapon::display_item_options() {
     pairVec menu_items;

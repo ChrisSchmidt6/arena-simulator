@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Combat.h"
-#include "Item.h"
-#include "Consumable.h"
-#include "assets.h"
+#include "Combat.hpp"
+#include "Item.hpp"
+#include "Consumable.hpp"
+#include "assets.hpp"
 
 struct Player : Combat {
     Player(const Player&) = delete;

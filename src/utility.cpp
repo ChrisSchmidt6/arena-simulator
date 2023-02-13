@@ -3,8 +3,8 @@
 #include <fstream>
 #include <limits>
 
-#include "Player.h"
-#include "utility.h"
+#include "Player.hpp"
+#include "utility.hpp"
 
 void print_separator() {
     std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";

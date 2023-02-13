@@ -1,9 +1,9 @@
 #include <iostream>
 #include <random>
 
-#include "Arena.h"
-#include "Consumable.h"
-#include "utility.h"
+#include "Arena.hpp"
+#include "Consumable.hpp"
+#include "utility.hpp"
 
 void Arena::main_menu() {
     pairVec menu_items;

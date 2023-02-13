@@ -1,6 +1,6 @@
 #include <random>
 
-#include "Combat.h"
+#include "Combat.hpp"
 
 Weapon* Combat::get_weapon() {
     // This shouldn't fail since only weapons will be stored in weapon_slot

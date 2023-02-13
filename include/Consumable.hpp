@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Item.h"
+#include "Item.hpp"
 
 struct Consumable : Item {
     const int ATTACK_MOD;

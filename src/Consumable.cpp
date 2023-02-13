@@ -1,9 +1,9 @@
 #include <iostream>
 #include <limits>
 
-#include "Consumable.h"
-#include "Player.h"
-#include "utility.h"
+#include "Consumable.hpp"
+#include "Player.hpp"
+#include "utility.hpp"
 
 void Consumable::display_item_options() {
     pairVec menu_items;

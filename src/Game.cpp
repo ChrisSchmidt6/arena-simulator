@@ -3,9 +3,9 @@
 #include <string>
 #include <limits>
 
-#include "Game.h"
-#include "Player.h"
-#include "utility.h"
+#include "Game.hpp"
+#include "Player.hpp"
+#include "utility.hpp"
 
 void Game::start() {
     std::cout << "Welcome to Arena Simulator!\n\n";

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Combat.h"
-#include "Player.h"
-#include "Enemy.h"
+#include "Combat.hpp"
+#include "Player.hpp"
+#include "Enemy.hpp"
 
 struct Arena {
     void main_menu();

@@ -1,4 +1,4 @@
-#include "assets.h"
+#include "assets.hpp"
 
 Item* get_item(const unsigned int ID) {
     for(int i = 0; i < item_container.size(); i++) {

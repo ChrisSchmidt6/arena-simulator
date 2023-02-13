@@ -2,9 +2,9 @@
 
 #include <vector>
 
-#include "Item.h"
-#include "Weapon.h"
-#include "Consumable.h"
+#include "Item.hpp"
+#include "Weapon.hpp"
+#include "Consumable.hpp"
 
 inline std::vector<Item*> item_container {
     // Misc

@@ -2,9 +2,9 @@
 #include <vector>
 #include <cmath>
 
-#include "Enemy.h"
-#include "assets.h"
-#include "Player.h"
+#include "Enemy.hpp"
+#include "assets.hpp"
+#include "Player.hpp"
 
 Enemy::Enemy(std::string name, int max_health, int attack, int accuracy,
     int defense, int level, int experience_rewarded, int gold,

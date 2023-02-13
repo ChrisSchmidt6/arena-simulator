@@ -3,10 +3,10 @@
 #include <sstream>
 #include <string>
 
-#include "Game.h"
-#include "Player.h"
-#include "Weapon.h"
-#include "utility.h"
+#include "Game.hpp"
+#include "Player.hpp"
+#include "Weapon.hpp"
+#include "utility.hpp"
 
 void Player::insert_item(Item* item) {
     inventory.push_back(item);

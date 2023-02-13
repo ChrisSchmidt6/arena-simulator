@@ -2,10 +2,10 @@
 #include <limits>
 #include <random>
 
-#include "Vendor.h"
-#include "Player.h"
-#include "assets.h"
-#include "utility.h"
+#include "Vendor.hpp"
+#include "Player.hpp"
+#include "assets.hpp"
+#include "utility.hpp"
 
 Vendor::Vendor(VenType type): TYPE(type) {
     switch(TYPE) {

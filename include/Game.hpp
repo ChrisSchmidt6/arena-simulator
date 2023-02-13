@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Arena.h"
-#include "Vendor.h"
+#include "Arena.hpp"
+#include "Vendor.hpp"
 
 struct Game {
     Game(const Game&) = delete;

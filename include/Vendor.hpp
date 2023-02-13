@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 
-#include "Item.h"
+#include "Item.hpp"
 
 struct Vendor {
     const VenType TYPE;

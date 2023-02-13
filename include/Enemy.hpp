@@ -3,8 +3,8 @@
 #include <iostream>
 #include <string>
 
-#include "Combat.h"
-#include "Item.h"
+#include "Combat.hpp"
+#include "Item.hpp"
 
 struct Enemy : Combat {
     Enemy(std::string name, int max_health, int attack, int accuracy,
