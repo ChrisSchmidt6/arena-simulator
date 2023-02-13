@@ -13,12 +13,15 @@ struct Game {
     void start();
     bool is_running();
     void main_menu();
+    void toggle_menu_reset();
+    bool menu_status();
     
     void generate_inventories();
 private:
-    Game() {}
+    Game(): active(false), clear_menus(false) {}
 
-    bool active = false;
+    bool active;
+    bool clear_menus;
 
     Arena arena;
     

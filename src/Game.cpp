@@ -4,6 +4,7 @@
 #include <limits>
 
 #include "Game.hpp"
+#include "GameLoop.hpp"
 #include "Player.hpp"
 #include "utility.hpp"
 
@@ -18,17 +19,18 @@ bool Game::is_running() {
 };
 
 void Game::main_menu() {
+    clear_menus = false;
+
     pairVec menu_items;
-    // Return early if Quit game is selected
-    bool return_early = false;
     
     do {
         std::cout << "[Main Menu]\n";
         menu_items.clear();
 
-        menu_items.push_back(std::make_pair("Quit game", [this, &return_early]() -> void {
+        menu_items.push_back(std::make_pair("Quit game", [this]() -> void {
             active = false;
-            return_early = true;
+            GameLoop::get().stop_game();
+            toggle_menu_reset();
         }));
 
         menu_items.push_back(std::make_pair("Enter arena", [this]() -> void {
@@ -48,12 +50,19 @@ void Game::main_menu() {
             Player::get().inventory_menu();
         }));
 
-        menu_items.push_back(std::make_pair("Save character", []() -> void {
-            save_to_file();
-            std::cout << "Your character has been saved.\n";
-            pause_until_enter();
+        menu_items.push_back(std::make_pair("Start Menu", [this]() -> void {
+            active = false;
+            toggle_menu_reset();
         }));
-    } while(print_menu(menu_items, true) && !return_early);
+    } while(print_menu(menu_items, true));
+};
+
+void Game::toggle_menu_reset() {
+    clear_menus = !clear_menus;
+};
+
+bool Game::menu_status() {
+    return !clear_menus;
 };
 
 void Game::generate_inventories() {
@@ -66,16 +75,16 @@ bool Game::initiate_character() {
     pairVec menu_items;
 
     bool success_initiating = false;
-    bool return_early = false;
 
     do {
         std::cout << "[Start Menu]\n";
 
         menu_items.clear();
 
-        menu_items.push_back(std::make_pair("Exit", [this, &return_early]() -> void {
+        menu_items.push_back(std::make_pair("Exit", [this]() -> void {
             active = false;
-            return_early = true;
+            GameLoop::get().stop_game();
+            toggle_menu_reset();
         }));
 
         menu_items.push_back(std::make_pair("Create character", [&success_initiating]() -> void {
@@ -93,7 +102,7 @@ bool Game::initiate_character() {
             std::cout << "\n";
             if (load_save_file()) success_initiating = true;
         }));
-    } while (print_menu(menu_items, true) && (!success_initiating && !return_early));
+    } while (print_menu(menu_items, true) && !success_initiating);
 
     return success_initiating;
 };

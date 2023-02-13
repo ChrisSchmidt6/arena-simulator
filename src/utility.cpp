@@ -3,14 +3,17 @@
 #include <fstream>
 #include <limits>
 
-#include "Player.hpp"
 #include "utility.hpp"
+#include "Game.hpp"
+#include "Player.hpp"
 
 void print_separator() {
     std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 }
 
 bool print_menu(pairVec menu_items, bool print_plain) {
+    Game& game = Game::get();
+
     int choice = -1;
     while(true) {
         std::cout << "Please enter a corresponding number for the following menu options.\n";
@@ -22,7 +25,7 @@ bool print_menu(pairVec menu_items, bool print_plain) {
             int option = print_plain ? i : i + 1;
             std::cout << "(" << (option) << ") " << menu_items[i].first << "\n";
         }
-        if(!print_plain) std::cout << "(" << menu_items.size() + 1 << ") Quit game\n";
+        if(!print_plain) std::cout << "(" << menu_items.size() + 1 << ") Main Menu\n";
 
         std::cout << "Choice: ";
         std::cin >> choice;
@@ -52,7 +55,7 @@ bool print_menu(pairVec menu_items, bool print_plain) {
             // Call function associated with menu choice
             menu_items[choice - 1].second();
         } else if(choice == menu_items.size() + 1) {
-            exit(-1);
+            game.toggle_menu_reset();
         } else if(choice == 0) {
             return false;
         } else {
@@ -60,7 +63,7 @@ bool print_menu(pairVec menu_items, bool print_plain) {
         }
     }
 
-    return true;
+    return game.menu_status();
 }
 
 void confirmation_menu(std::string question, std::function<void()> action) {
@@ -140,6 +143,7 @@ bool create_save_file() {
         std::cout << "That character already exists.\n\n";
         return false;
     } else {
+        Player::get().reset_player_data();
         save_to_file();
 
         std::cout << "You have created a new character: " << Player::get().name << "\n\n";

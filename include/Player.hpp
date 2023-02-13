@@ -36,14 +36,16 @@ struct Player : Combat {
 
     std::string get_save_data();
     bool load_save_data(std::string &save_data);
+    void reset_player_data();
 private:
-    Player() {}
+    Player(): experience(0), experience_target(50), total_experience(0),
+        EXPERIENCE_SCALING(1.15), LOSE_WEAPON_CHANCE(10) {}
 
-    int experience = 0;
-    int experience_target = 50;
-    int total_experience = 0;
-    const double EXPERIENCE_SCALING = 1.15;
-    const int LOSE_WEAPON_CHANCE = 10;
+    int experience;
+    int experience_target;
+    int total_experience;
+    const double EXPERIENCE_SCALING;
+    const int LOSE_WEAPON_CHANCE;
     std::vector<Item*> inventory;
 
     void level_up();

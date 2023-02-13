@@ -294,6 +294,7 @@ std::string Player::get_save_data() {
 };
 
 bool Player::load_save_data(std::string &save_data) {
+    reset_player_data();
     try {
         int pos = save_data.find(": ", 0) + 2;
         int len = save_data.find("\n", pos) - pos;
@@ -368,4 +369,17 @@ bool Player::load_save_data(std::string &save_data) {
     }
 
     return true;
+};
+
+void Player::reset_player_data() {
+    max_health = 10;
+    health = 10;
+    attack = 1;
+    accuracy = 1;
+    defense = 1;
+    level = 1;
+    experience = 0;
+    total_experience = 0;
+    gold = 30;
+    inventory.clear();
 };

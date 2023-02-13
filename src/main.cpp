@@ -1,13 +1,9 @@
-#include "Game.hpp"
+#include "GameLoop.hpp"
 
 int main() {
-	Game& game = Game::get();
+	GameLoop& game_loop = GameLoop::get();
 
-	game.start();
-	
-	while(game.is_running()) {
-		game.main_menu();
-	}
+	game_loop.start_game();
 
 	return 0;
 }
