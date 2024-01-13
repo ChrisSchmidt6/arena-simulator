@@ -140,7 +140,7 @@ void Player::inventory_menu() {
             Item* item = inventory[i];
             menu_items.push_back(std::make_pair(
                 "View options - " + inventory[i]->ITEM_NAME,
-                [this, item]() -> void {
+                [item]() -> void {
                     item->display_item_options();
                 }));
         }

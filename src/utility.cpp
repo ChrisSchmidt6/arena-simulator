@@ -76,7 +76,7 @@ void confirmation_menu(std::string question, std::function<void()> action) {
 
         menu_items.clear();
 
-        menu_items.push_back(std::make_pair("Blank", [action, &return_early]() -> void {}));
+        menu_items.push_back(std::make_pair("Blank", []() -> void {}));
 
         menu_items.push_back(std::make_pair("Yes", [action, &return_early]() -> void {
             action();

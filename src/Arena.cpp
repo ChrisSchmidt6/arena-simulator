@@ -50,7 +50,6 @@ void Arena::main_menu() {
 };
 
 void Arena::fight_menu(bool safe_death) {
-    const int tier = player.get_stat("Level");
     std::random_device rd;
     std::mt19937 mt(rd());
 
